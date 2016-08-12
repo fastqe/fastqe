@@ -1,10 +1,12 @@
 # fastqe
 
+## FASTQ with Emoji
 
+Given a fastq file in Illumina 1.8+/Sanger format, calculate the mean (rounded) score for each position and print a corresponding emoji!
 
-## Presentation
+![Example](fastqe.png)
 
-Based on [this](http://blog.kdheepak.com/jupyter-notebook-revealjs-and-github-pages.html) blog post, the slides based on the Jupyter Notebook are available here:
+## Todo
 
-A version of these slides were presented as part of this talk at PyConAu 2016.
+Rearange emoji to use more realsitic ranges (i.e > 60 use uncommon emoji)
 
