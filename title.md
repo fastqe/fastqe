@@ -1,0 +1,1 @@
+FastQE: the surprisingly effective use of emoji to represent sequence data quality
