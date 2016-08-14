@@ -1,1 +1,1 @@
-FastQE: the surprisingly effective use of emoji to represent sequence data quality
+FastQE: a quick and simple command line tool to view the quality information of sequence data using emoji. 
