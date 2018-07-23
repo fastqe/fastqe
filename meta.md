@@ -2,3 +2,5 @@ Initially just a proof of concept for Pycon Au 2016, this (probably) isn't as si
 
 Contributions to the code welcome:
 https://github.com/lonsbio/fastqe
+
+or to this paper.
