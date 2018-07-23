@@ -1,1 +1,1 @@
-FastQE: a quick and simple command line tool to view the quality information of sequence data using emoji. 
+FASTQE🤔: a quick and simple command line tool to view the quality information of sequence data using emoji. 
