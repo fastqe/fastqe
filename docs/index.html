@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>FASTQE🤔</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="narrow-jumbotron.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <header class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills float-right">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" target="_blank"  href="https://github.com/lonsbio/fastqe/">Source</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" target="_blank" href="http://twitter.com/lonsbio">Contact</a>
+            </li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">FASTQE🤔 </h3>
+      </header>
+
+      <main role="main">
+
+        <div class="jumbotron">
+          <h1 class="display-3"> FASTQ + Emoji = FASTQE 🤔</h1>
+          <p class="lead">
+Compute quality stats for FASTQ files and print those stats as emoji... for some reason.</p>
+<img src="img/fastqe_binned.png" class="img-fluid" alt="Responsive image">
+
+</div>
+
+        <div class="row marketing">
+          <div class="col-lg-6">
+
+            <h4>Install</h4>
+          <p>  Python 3 required. Tested ( a little bit) on Linux and Mac. Windows status unknown.
+            </p>
+        <p><kbd>pip install fastqe</kbd></p>
+            <h4>Usage</h4>
+
+            See the <a target="_blank" href="https://github.com/lonsbio/fastqe">README</a> for more options.
+        <p><kbd>fastqe [--bin] [--min] [--max] [FASTQ_FILE ...]</kbd></p>
+
+
+                    <h4>Mapping & Scale Bar</h4>
+                    <p>
+                  See <a href="https://github.com/lonsbio/fastqe">README</a> for more detail on the  mapping from phred scores to emoji:
+
+                  🚫❌👺💔🙅👾👿💀👻🙈🙉🙊🐵😿😾🙀💣🔥😡💩⚠️<br>
+                  😀😅😏😊😙😗😚😃😘😆😄😋😄😝😛😜😉😁😄😎😍
+        </p>
+
+        <p>Scores can also be binned:</p>
+
+        <table>
+        <tr>
+          <th>Bin</th>
+
+          <th>Emoji</th>
+        </tr>
+          <tr>
+
+            <td>N  </td>    <td>🚫</td>
+          </tr><tr>
+            <td>2-9 </td>   <td>💀</td>
+          </tr><tr>
+          <td>10–19 </td>    <td>💩</td>
+            </tr><tr>
+            <td>20–24 </td>   <td>⚠️</td>
+          </tr><tr>
+            <td>25–29 </td> <td>😄</td>
+          </tr><tr>
+            <td>30–34 </td> <td>😆</td>
+          </tr><tr>
+            <td>35–39 </td>   <td>😎</td>
+          </tr><tr>
+            <td>≥ 40 </td>  <td>😍</td>
+
+          </tr>
+        </table>
+        <br>
+        <p>
+        Future work aims to add converting FASTQ files to this format for compression.
+          </p>
+
+
+          </div>
+
+          <div class="col-lg-6">
+
+            <h4>Feedback</h4>
+              <p> Submit <a href="https://github.com/lonsbio/fastqe/issues/new">bugs, enhancements and feedback via GitHub</a>.</p>
+
+            </p>
+
+              <h4>Contribute</h4>
+              <p>There is lots of room for improvement in this tool. The majority of the  code has been
+                written in the hours (and minutes) prior to presentations, so its almost guaranteed to be suboptimal.
+                Pull requests welcome on <a  target="_blank"  href="https://github.com/lonsbio/fastqe/">GitHub</a>.
+            </p>
+
+              <h4>Paper</h4>
+              <p>Initially just a proof of concept for <a href="https://2016.pycon-au.org/">PyCon Au 2016</a>, this (probably) isn't as silly as it sounds! If you find <b>fastqe</b> useful in your work or teaching, consider contributing to an article
+                 in the <kbd>paper</kbd> branch of the git repository, or via <a href="">Authorea directly.</a> </p>
+
+        </div>
+        </div>
+
+      </main>
+
+      <footer class="footer">
+        <p>&copy; Andrew Lonsdale 2018</p>
+      </footer>
+
+    </div> <!-- /container -->
+  </body>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</html>
