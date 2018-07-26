@@ -11,9 +11,6 @@ Given a fastq file in Illumina 1.8+/Sanger format, calculate the mean (rounded) 
 ![Example](docs/img/fastqe_binned.png)
 
 
-### Presentations
-
-FASTQE has been presented at:
 
 # History
 
