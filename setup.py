@@ -10,7 +10,7 @@ For some reason, it then represents these as emoji.
 setup(
   name = 'fastqe',
   packages = ['fastqe'],
-  version = '0.1.0',
+  version = '0.1.1',
   license = 'MIT',
   description = 'A emoji based bioinformatics command line tool',
   long_description=(LONG_DESCRIPTION),
