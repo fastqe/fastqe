@@ -353,12 +353,12 @@ def process_files(options):
                     else:
                         if options.max:
                             logging.info("Calculate max quality per position")
-                            print(stats.pretty(fasta_filename),"max"," ".join([emojify(emaps.fastq_emoji_map[s]) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_maxs)]),sep='\t')
+                            print(stats.pretty(fasta_filename),"max"," ".join([emojify(emaps.fastq_emoji_map.get(s,':heart_eyes:')) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_maxs)]),sep='\t')
                         logging.info("Calculate mean quality per position")
-                        print(stats.pretty(fasta_filename),"mean"," ".join([emojify(emaps.fastq_emoji_map[s]) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_mean)]),sep='\t')
+                        print(stats.pretty(fasta_filename),"mean"," ".join([emojify(emaps.fastq_emoji_map.get(s,':heart_eyes:')) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_mean)]),sep='\t')
                         if options.min:
                             logging.info("Calculate min quality per position")
-                            print(stats.pretty(fasta_filename),"min"," ".join([emojify(emaps.fastq_emoji_map[s]) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_mins)]),sep='\t')
+                            print(stats.pretty(fasta_filename),"min"," ".join([emojify(emaps.fastq_emoji_map.get(s,':heart_eyes:')) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_mins)]),sep='\t')
 
 
 
