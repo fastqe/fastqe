@@ -41,10 +41,19 @@ FASTQE started out as part of PyCon Au presentations:
 - Reads up to 500bp only
 - Same emoji for all scores above 41
 
-## Quickstart
+# Install
+
+`pip` or BioConda
+
 
 
 `pip install fastqe`
+
+
+`conda install -c bioconda fastqe`
+
+
+# Quickstart
 
 
 `fastqe test.fastq`
@@ -56,7 +65,7 @@ FASTQE started out as part of PyCon Au presentations:
 
 
 
-## Usage
+# Usage
 
 `fastqe` can display usage information on the command line via the `-h` or `--help` argument:
 ```
