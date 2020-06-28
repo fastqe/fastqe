@@ -25,7 +25,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 from Bio.SeqIO import QualityIO
 from . import fastqe_map as emaps # todo make maps illumin 1.9 specific etc
-
+import os
+import gzip
 
 EXIT_FILE_IO_ERROR = 1
 EXIT_COMMAND_LINE_ERROR = 2
@@ -328,7 +329,11 @@ def process_files(options):
         for fasta_filename in options.fasta_files:
             logging.info("Processing FASTA file from {}".format(fasta_filename))
             try:
-                fasta_file = open(fasta_filename)
+                if fasta_filename.endswith(".gz"):
+                    fasta_file = gzip.open(fasta_filename, 'rt')
+                else:
+                    fasta_file = open(fasta_filename)
+
             except IOError as exception:
                 exit_with_error(str(exception), EXIT_FILE_IO_ERROR)
             else:
