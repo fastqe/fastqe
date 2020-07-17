@@ -1,0 +1,6 @@
+{
+'#': ':no_entry_sign:',
+'\"': ':x:',
+'!': ':japanese_goblin:',
+'$': ':broken_heart:'
+}
