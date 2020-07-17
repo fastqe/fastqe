@@ -17,7 +17,7 @@ setup(
   author = 'Andrew Lonsdale',
   author_email = 'andrew.lonsdale@lonsbio.com.au',
   url = 'https://github.com/lonsbio/fastqe',
-  download_url = 'https://github.com/lonsbio/fastqe/archive/fastqe-0.2.0.tar.gz',
+  download_url = 'https://github.com/lonsbio/fastqe/archive/fastqe-0.2.1.tar.gz',
   keywords = ['emoji', 'bioinformatics', 'next-generation sequencing'],
   classifiers = [],
   install_requires=["biopython>=1.66",'pyemojify'],
