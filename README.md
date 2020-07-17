@@ -222,3 +222,16 @@ Binned scale:
 40 I 😍
 41 J 😍
 ```
+
+## Custom
+
+Use a dictionary of [Pyemojify mappings](https://github.com/lord63/pyemojify/blob/master/pyemojify/emoji.py) in a text file instead of built in emoji choices: 
+
+```
+{
+'#': ':no_entry_sign:',
+'\"': ':x:',
+'!': ':japanese_goblin:',
+'$': ':broken_heart:'
+}
+```
