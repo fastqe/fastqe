@@ -34,7 +34,7 @@ FASTQE started out as part of PyCon Au presentations:
 - version 0.1.0 July 2018
   - clean up code
   - add binning
-- version 0.2.0 July 2020
+- version 0.2.5 July 2020
   - refactor code 
   - add long read support with --long
   - add --noemoji for block-based output on systems that don't support emoji
