@@ -11,7 +11,7 @@ variety of statistics, and then prints a summary of the statistics as output....
 '''
 
 from __future__ import print_function
-from argparse import ArgumentParser
+from argparse import ArgumentParser, FileType
 from math import floor
 import sys
 from Bio import SeqIO
@@ -27,47 +27,45 @@ from Bio.SeqIO import QualityIO
 from . import fastqe_map as emaps # todo make maps illumin 1.9 specific etc
 import os
 import gzip
+import ast
+import binascii
+
+
+#PyCharm testing command line processing
+# sys.argv = [
+#    __file__,
+#    '--bin',
+#    '--long','3000',
+# #   '--output', 'testouput.txt',
+# #   '--custom',
+# #   'test/test_dict.txt',
+#    'test/test_short_seq.fq',
+#    'test/test.fastq',
+#    'test/test_wiki.fq',
+# ]
+
 
 EXIT_FILE_IO_ERROR = 1
 EXIT_COMMAND_LINE_ERROR = 2
 EXIT_FASTA_FILE_ERROR = 3
 DEFAULT_MIN_LEN = 0
 DEFAULT_VERBOSE = False
-#HEADER = 'FILENAME\tNUMSEQ\tTOTAL\tMIN\tAVG\tMAX'
+#HEADER = 'FILENAME\tNUMSEQ\tTOTAL\tMIN\tAVG\tMAX\tQUALITY'
 HEADER = '# FASTQE sequence quality for:'
-
+DEFAULT_READ_LENGTH = 500
 PROGRAM_NAME = "fastqe"
 
+CASE_NEITHER = 0
+CASE_MIN = 1
+CASE_MAX = 2
+CASE_BOTH = 3
 
-#:no_entry_sign:',
-#2–9 6
-#'#': ':skull:',
-#10–19 15
-#'+': ':poop:' ,
-#20–24 22
-#'5': ':rage:',
-#25–29 27
-#':': ':neutral_face:',
-#30–34 33
-#'?': ':smile:',
-#35–39 37
-#'D': ':sunglasses:',
-#≥ 40 40
-#'J': ':heart_eyes:',
-
-def print_scale(full_quals,binned):
+def print_scale(full_quals,mapping_dict,binned):
     count = 0
-    if binned:
-        print("#scale for fastqe (binned)")
-
-        for i in full_quals:
-            print("# ",count,i,emojify(emaps.fastq_emoji_map_binned.get(i,':heart_eyes:')))
-            count = count +1
-    else:
-        print("#scale for fastqe")
-        for i in full_quals:
-            print("# ",count,i,emojify(emaps.fastq_emoji_map.get(i,':heart_eyes:')))
-            count = count +1
+    print("#scale for fastqe")
+    for i in full_quals:
+        print("# ",count,i,emojify(mapping_dict.get(i,':heart_eyes:')))
+        count = count +1
 
 
 
@@ -96,7 +94,7 @@ def parse_args():
     Returns Options object with command line argument values as attributes.
     Will exit the program on a command line error.
     '''
-    parser = ArgumentParser(description='Read one or more FASTQ files, compute quality stats for each file, print as emoji... for some reason.')
+    parser = ArgumentParser(description='Read one or more FASTQ files, compute quality stats for each file, print as emoji... for some reason.'+emojify(":smile:"))
     parser.add_argument(
         '--minlen',
         metavar='N',
@@ -104,6 +102,9 @@ def parse_args():
         default=DEFAULT_MIN_LEN,
         help='Minimum length sequence to include in stats (default {})'.format(
             DEFAULT_MIN_LEN))
+    parser.add_argument('--scale',
+                        action='store_true',
+                        help='show relevant scale in output')
     parser.add_argument('--version',
         action='version',
         version='%(prog)s ' + PROGRAM_VERSION)
@@ -111,25 +112,39 @@ def parse_args():
         default=True,
         action='store_true',
         help='show mean quality per position (DEFAULT)')
+    parser.add_argument('--custom',
+                        metavar='CUSTOM_DICT',
+                        type=str,
+                        help='use a mapping of custom emoji to quality in CUSTOM_DICT ('+emojify(":snake:")+emojify(":palm_tree:")+')')
     parser.add_argument('--bin',
-            action='store_true',
-            help='use binned scores')
+                        action='store_true',
+                        help='use binned scores ('+emojify(":no_entry_sign:")+emojify(":skull:")
+                             +emojify(":poop:")+emojify(":warning:")+" "+emojify(":smile:")+emojify(":laughing:")+emojify(":sunglasses:")+emojify(":heart_eyes:")+")")
+    parser.add_argument('--noemoji',
+                        action='store_true',
+                        help='use mapping without emoji (▁▂▃▄▅▆▇█)')
     parser.add_argument('--min',
         action='store_true',
         help='show minimum quality per position')
     parser.add_argument('--max',
         action='store_true',
         help='show maximum quality per position')
+    parser.add_argument('--output',
+                        metavar='OUTPUT_FILE',
+                        type=FileType('w'),
+                        help = 'write output to OUTPUT_FILE instead of stdout'
+                        )
+    parser.add_argument('--long',
+                        metavar='READ_LENGTH',
+                        type=int,
+                        help='enable long reads up to READ_LENGTH bp long')
     parser.add_argument('--log',
-        metavar='LOG_FILE',
-        type=str,
-        help='record program progress in LOG_FILE')
-    parser.add_argument('--scale',
-    action='store_true',
-    help='show relevant scale in output')
+                        metavar='LOG_FILE',
+                        type=str,
+                        help='record program progress in LOG_FILE')
     parser.add_argument('fasta_files',
         nargs='*',
-        metavar='FASTA_FILE',
+        metavar='FASTQ_FILE',
         type=str,
         help='Input FASTQ files')
     return parser.parse_args()
@@ -153,6 +168,7 @@ class FastaStats(object):
                  min_len=None,
                  max_len=None,
                  average=None,
+                 counts_per_position=None,
                  quality_scores_mean=None,
                  quality_scores_min=None,
                  quality_scores_max=None):
@@ -162,6 +178,7 @@ class FastaStats(object):
         self.min_len = min_len
         self.max_len = max_len
         self.average = average
+        self.counts_per_position =  counts_per_position
         self.quality_score_mean = quality_scores_mean
         self.quality_score_min = quality_scores_min
         self.quality_score_max = quality_scores_max
@@ -181,7 +198,7 @@ class FastaStats(object):
                 self.num_seqs, self.num_bases, self.min_len, self.max_len,
                 self.average)
 
-    def from_file(self, fasta_file, minlen_threshold=DEFAULT_MIN_LEN):
+    def from_file(self, fasta_file, read_size, minlen_threshold=DEFAULT_MIN_LEN):
         '''Compute a FastaStats object from an input FASTA file.
 
         Arguments:
@@ -196,9 +213,10 @@ class FastaStats(object):
 
         #FASTQ addition
         # works for up to 500bp reads
-        means = np.zeros(500)
-        mins = np.zeros(500)
-        maxs = np.zeros(500)
+        means = np.zeros(read_size)
+        mins = np.zeros(read_size)
+        maxs = np.zeros(read_size)
+        counts = np.zeros(read_size) # how often this position has a value - for long reads
 
         num_seqs = num_bases = 0
         min_len = max_len = None
@@ -208,6 +226,8 @@ class FastaStats(object):
 
             index=0
             for s in seq.letter_annotations["phred_quality"]:
+
+                assert(s < read_size)
                 #maxs
                 if s > maxs[index]:
                     maxs[index] = s
@@ -218,9 +238,13 @@ class FastaStats(object):
                 elif s < mins[index]:
                     mins[index] = s
 
+                #counts
+                counts[index] += 1
+
                 #means
                 means[index] += s
                 index = index+1
+
 
 
             # FASTA stat
@@ -248,9 +272,14 @@ class FastaStats(object):
 
         #fastq
 
+        counts_cleaned = np.trim_zeros(counts, 'b' )
+        self.counts_per_position = counts_cleaned
+
+
         # create fake sequence for each type
-        cleaned = np.trim_zeros(means)
-        means_fp = cleaned/num_seqs
+        cleaned = np.trim_zeros(means, 'b' )
+        #means_fp = cleaned/num_seqs
+        means_fp = cleaned/counts_cleaned # use counts to fix long read where not all seq same length
         fake_seq= ''.join(["a"]*len(means_fp.round()))
 
         record_mean = SeqRecord(Seq(fake_seq), id="test", name="mean scores",
@@ -261,7 +290,7 @@ class FastaStats(object):
 
 
 
-        mins_trimmed = np.trim_zeros(mins)
+        mins_trimmed = np.trim_zeros(mins,'b')
         fake_seq_min= ''.join(["a"]*len(mins_trimmed))
 
         record_mins = SeqRecord(Seq(fake_seq_min), id="test", name="mean scores",
@@ -271,7 +300,7 @@ class FastaStats(object):
         self.quality_scores_mins= record_mins
 
 
-        maxs_trimmed = np.trim_zeros(maxs)
+        maxs_trimmed = np.trim_zeros(maxs,'b')
         fake_seq_maxs= ''.join(["a"]*len(maxs_trimmed))
 
         record_maxs= SeqRecord(Seq(fake_seq_maxs), id="test", name="mean scores",
@@ -279,7 +308,6 @@ class FastaStats(object):
                    letter_annotations={'phred_quality':list(maxs_trimmed.astype(int))})
 
         self.quality_scores_maxs= record_maxs
-
 
 
         return self
@@ -301,6 +329,7 @@ class FastaStats(object):
 
 
         return(filename)
+        # original stats info TODO add option
         if self.num_seqs > 0:
             num_seqs = str(self.num_seqs)
             num_bases = str(self.num_bases)
@@ -325,6 +354,71 @@ def process_files(options):
     Result:
        None
     '''
+
+    #process options once for shared code between stdin and FASTQ files
+    # set mapping to default
+    mapping_dict = emaps.fastq_emoji_map
+    mapping_text = ""
+    mapping_default = ":heart_eyes:"
+    mapping_spacer = " "
+
+    if options.custom:
+        with open(options.custom) as f:
+            mapping_dict = ast.literal_eval(f.read())
+            mapping_text = " (custom)"
+            logging.info("Custom emoji map:", options.custom)
+
+    elif options.noemoji:
+            # list of tuples to process ("min", stats.quality_scores_min) then loop and print results of map_scores with each
+            mapping_dict = emaps.fastq_noemoji_map
+            mapping_text = " (no-emoji)"
+            mapping_default = '█'
+            mapping_spacer = ""
+            logging.info("Use no-emoji map")
+    elif options.bin:
+        # list of tuples to process ("min", stats.quality_scores_min) then loop and print results of map_scores with each
+        mapping_dict = emaps.fastq_emoji_map_binned
+        mapping_text = " (binned)"
+        logging.info("Binned emoji map")
+
+    else:
+        logging.info("Default emoji map")
+
+    OUTPUT_OPTIONS = CASE_NEITHER
+    if options.max and options.min:
+        OUTPUT_OPTIONS = CASE_BOTH
+        logging.info("Calculate max quality per position")
+        logging.info("Calculate min quality per position")
+    elif options.max:
+        OUTPUT_OPTIONS = CASE_MAX
+        logging.info("Calculate max quality per position")
+    elif options.min:
+        OUTPUT_OPTIONS = CASE_MIN
+        logging.info("Calculate min quality per position")
+    else:
+        OUTPUT_OPTIONS = CASE_NEITHER
+
+    if options.output:
+        output_file = options.output
+        logging.info("Redirect output to:", options.output)
+    else:
+        output_file = sys.stdout
+
+    if options.long:
+        read_size = options.long
+        logging.info("Long read support up for bp up to:",options.long)
+    else:
+        read_size = DEFAULT_READ_LENGTH
+
+
+    # before file processing
+    # scale - print scale first before output, with lines starting with #
+    if options.scale:
+        print_scale(emaps.all_qualities, mapping_dict, options.bin)
+
+
+
+
     if options.fasta_files:
         for fasta_filename in options.fasta_files:
             logging.info("Processing FASTA file from {}".format(fasta_filename))
@@ -338,44 +432,84 @@ def process_files(options):
                 exit_with_error(str(exception), EXIT_FILE_IO_ERROR)
             else:
                 with fasta_file:
-                    stats = FastaStats().from_file(fasta_file, options.minlen)
-                    #print(stats.pretty(fasta_filename))
 
-                    if options.scale:
-                        print_scale(emaps.all_qualities,options.bin)
-
-                    #rewrite this
-                    if options.bin:
-                        logging.info("Binned calculations")
-                        if options.max:
-                            logging.info("Calculate max quality per position")
-                            print(stats.pretty(fasta_filename),"max (binned)"," ".join([emojify(emaps.fastq_emoji_map_binned.get(s,':heart_eyes:')) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_maxs)]),sep='\t')
-                        logging.info("Calculate mean quality per position")
-                        print(stats.pretty(fasta_filename),"mean (binned)"," ".join([emojify(emaps.fastq_emoji_map_binned.get(s,':heart_eyes:')) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_mean)]),sep='\t')
-                        if options.min:
-                            logging.info("Calculate min quality per position")
-                            print(stats.pretty(fasta_filename),"min (binned)"," ".join([emojify(emaps.fastq_emoji_map_binned.get(s,':heart_eyes:')) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_mins)]),sep='\t')
-                    else:
-                        if options.max:
-                            logging.info("Calculate max quality per position")
-                            print(stats.pretty(fasta_filename),"max"," ".join([emojify(emaps.fastq_emoji_map.get(s,':heart_eyes:')) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_maxs)]),sep='\t')
-                        logging.info("Calculate mean quality per position")
-                        print(stats.pretty(fasta_filename),"mean"," ".join([emojify(emaps.fastq_emoji_map.get(s,':heart_eyes:')) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_mean)]),sep='\t')
-                        if options.min:
-                            logging.info("Calculate min quality per position")
-                            print(stats.pretty(fasta_filename),"min"," ".join([emojify(emaps.fastq_emoji_map.get(s,':heart_eyes:')) for s in QualityIO._get_sanger_quality_str(stats.quality_scores_mins)]),sep='\t')
-
-
-
-                    #print("MAX:  "," ".join([s for s in QualityIO._get_sanger_quality_str(stats.quality_scores_maxs)]))
-                    #print("MEAN: "," ".join([s for s in QualityIO._get_sanger_quality_str(stats.quality_scores_mean)]))
-                    #print("MIN:  "," ".join([s for s in QualityIO._get_sanger_quality_str(stats.quality_scores_mins)]))
+                    stats = FastaStats().from_file(fasta_file, read_size, options.minlen)
+                    print_output(stats,fasta_filename, mapping_dict, mapping_text, mapping_default, output_file, OUTPUT_OPTIONS, spacer = mapping_spacer)
 
 
     else:
-        logging.info("Processing FASTA file from stdin")
-        stats = FastaStats().from_file(sys.stdin, options.minlen)
-        print(stats.pretty("stdin"))
+        logging.info("Processing FASTQ file from stdin")
+        print("Processing FASTQ file from stdin, press Ctrl-C to cancel. fastqe --help for more info", file = sys.stderr)
+
+        # peek to see if gzipped
+        #print(binascii.hexlify(sys.stdin.buffer.peek(1)[:2]) == b'1f8b')
+        if (binascii.hexlify(sys.stdin.buffer.peek(1)[:2]) == b'1f8b'):
+            #print("zipped")
+            stdin_file = gzip.open(sys.stdin.buffer, 'rt')
+        else:
+            stdin_file = sys.stdin
+
+        stats = FastaStats().from_file(stdin_file, read_size, options.minlen)
+        print_output(stats, "-", mapping_dict, mapping_text, mapping_default, output_file, OUTPUT_OPTIONS, spacer = mapping_spacer)
+
+
+
+
+def print_output(stats_object,fasta_filename, mapping_dict, mapping_text,mapping_default, output_file ,output_type, sep = "\t",spacer = " " ):
+    '''
+    :param stats_object:
+    :param filename:
+    :param mapping_dict:
+    :param mapping_text:
+    :param mapping_default:
+    :param seperator:
+    :param output_file:
+    :param output_type:
+    :param sep:
+    :return:
+    '''
+
+    if output_type == CASE_BOTH or output_type == CASE_MAX:
+        print(stats_object.pretty(fasta_filename), "max" + mapping_text,
+              map_scores(stats_object.quality_scores_maxs, mapping_dict=mapping_dict, default_value = mapping_default,spacer=spacer), sep=sep, file=output_file)
+
+    print(stats_object.pretty(fasta_filename), "mean" + mapping_text,
+          map_scores(stats_object.quality_scores_mean, mapping_dict=mapping_dict,default_value = mapping_default,spacer=spacer), sep=sep,file=output_file)
+
+    if output_type == CASE_BOTH or output_type == CASE_MIN:
+        print(stats_object.pretty(fasta_filename), "min" + mapping_text,
+              map_scores(stats_object.quality_scores_mins, mapping_dict=mapping_dict, default_value = mapping_default,spacer=spacer), sep=sep, file=output_file)
+
+
+    #print(stats_object.pretty(fasta_filename), "counts" + mapping_text,
+    #      nomap([a for a in stats_object.counts_per_position]
+    #                 ), sep=sep,file=output_file)
+
+def nomap(input):
+
+    return(input)
+
+
+def map_scores(sequence,
+               mapping_dict = emaps.fastq_emoji_map,
+               default_value = ":heart_eyes:",
+               mapping_function = emojify,
+              spacer = " "):
+    '''
+    :param sequence:
+    :param mapping_dict:
+    :param default_value:
+    :param mapping_function:
+    :param spacer:
+    :return:
+    '''
+
+    mapped_values = spacer.join([mapping_function(mapping_dict.get(s, default_value)) for s in QualityIO._get_sanger_quality_str(sequence)])
+    return(mapped_values)
+
+
+
+
 
 
 def init_logging(log_filename):

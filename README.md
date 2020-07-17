@@ -34,11 +34,19 @@ FASTQE started out as part of PyCon Au presentations:
 - version 0.1.0 July 2018
   - clean up code
   - add binning
-
+- version 0.2.0 July 2020
+  - refactor code 
+  - add long read support with --long
+  - add --noemoji for block-based output on systems that don't support emoji
+  - add --custom for user-defined mapping to emoji
+  - add --output to redirect to file instead of stdout 
+  - add gzip support
+  - add redirect from stdin support
+  - fix bug of dropping position if some sequences are only 0 quality
 
 # Limitations
 
-- Reads up to 500bp only
+- ~Reads up to 500bp only~ Read length above 500bp allowed but must be set by user with `--long MAX_LENGTH`
 - Same emoji for all scores above 41
 
 # Install
@@ -58,38 +66,43 @@ FASTQE started out as part of PyCon Au presentations:
 
 `fastqe test.fastq`
 
-
 `fastqe --min test.fastq`
 
 `fastqe --max test.fastq`
 
-
+`fastqe --max -min -bin test.fastq`
 
 # Usage
 
 `fastqe` can display usage information on the command line via the `-h` or `--help` argument:
 ```
-% `fastqe`-py -h
-usage: fastqe [-h] [--minlen N] [--version] [--mean] [--bin] [--min] [--max]
-              [--log LOG_FILE] [--scale]
+usage: fastqe [-h] [--minlen N] [--scale] [--version] [--mean]
+              [--custom CUSTOM_DICT] [--bin] [--noemoji] [--min] [--max]
+              [--output OUTPUT_FILE] [--long READ_LENGTH] [--log LOG_FILE]
               [FASTQ_FILE [FASTQ_FILE ...]]
 
 Read one or more FASTQ files, compute quality stats for each file, print as
-emoji... for some reason.
+emoji... for some reason.😄
 
 positional arguments:
-  FASTQ_FILE      Input FASTQ files
+  FASTQ_FILE            Input FASTQ files
 
 optional arguments:
-    -h, --help      show this help message and exit
-    --minlen N      Minimum length sequence to include in stats (default 0)
-    --version       show program's version number and exit
-    --mean          show mean quality per position (DEFAULT)
-    --bin           use binned scores
-    --min           show minimum quality per position
-    --max           show maximum quality per position
-    --log LOG_FILE  record program progress in LOG_FILE
-    --scale         show relevant scale in output    
+  -h, --help            show this help message and exit
+  --minlen N            Minimum length sequence to include in stats (default
+                        0)
+  --scale               show relevant scale in output
+  --version             show program's version number and exit
+  --mean                show mean quality per position (DEFAULT)
+  --custom CUSTOM_DICT  use a mapping of custom emoji to quality in
+                        CUSTOM_DICT (🐍🌴)
+  --bin                 use binned scores (🚫💀💩⚠️😄😆😎😍)
+  --noemoji             use mapping without emoji (▁▂▃▄▅▆▇█)
+  --min                 show minimum quality per position
+  --max                 show maximum quality per position
+  --output OUTPUT_FILE  write output to OUTPUT_FILE instead of stdout
+  --long READ_LENGTH    enable long reads up to READ_LENGTH bp long
+  --log LOG_FILE        record program progress in LOG_FILE
 ```
 
 ## Licence
