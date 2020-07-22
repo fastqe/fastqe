@@ -120,13 +120,14 @@ This program is released as open source software under the terms of [MIT License
 ## Roadmap
 
 - [x] Rearrange emoji to use more realistic ranges (i.e > 60 use uncommon emoji) and remove inconsistencies
-- [ ] Add conversion to emoji sequence format, with/without binning, for compressed fastq data
+- [ ] ~Add conversion to emoji sequence format, with/without binning, for compressed fastq data~ fits into https://github.com/fastqe/fastqe-convert/
 - [ ] Rewrite conversion to standalone function for use in iPython etc.
 - [ ] Teaching resources
 - [ ] Test data and unit tests
-- [ ] Add FASTA mode for nucleotide and proteins emoji
+- [ ] ~Add FASTA mode for nucleotide and proteins emoji~ see https://github.com/fastqe/fastqe-convert/
 - [ ] MultiQC plugin
 
+Rather convert to emoji than summarise? We've just started `fastqe-convert` for that: https://github.com/fastqe/fastqe-convert/
 
 ## Scale
 
