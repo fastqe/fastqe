@@ -533,6 +533,14 @@ def init_logging(log_filename):
         logging.info('program started')
         logging.info('command line: {0}'.format(' '.join(sys.argv)))
 
+def run_fastqe(fasta_files,minlen=0,scale=False,version=False,
+               mean = True,custom=None,noemoji=False,min=False,max=False,
+               output=None,long=None,log=None,bin=False):
+    options = Namespace(bin=bin, custom=custom, fasta_files=fasta_files,log=log, long=long, max=max, mean=mean, min=min, minlen=minlen, noemoji=noemoji, output=output, scale=scale, version=version)
+    if options.version:
+        print(PROGRAM_NAME,PROGRAM_VERSION)
+        return
+    process_files(options)
 
 def main():
     "Orchestrate the execution of the program"
