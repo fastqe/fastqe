@@ -47,7 +47,7 @@ import binascii
 
 EXIT_FILE_IO_ERROR = 1
 EXIT_COMMAND_LINE_ERROR = 2
-EXIT_FASTA_FILE_ERROR = 3
+EXIT_FASTQ_FILE_ERROR = 3
 DEFAULT_MIN_LEN = 0
 DEFAULT_VERBOSE = False
 #HEADER = 'FILENAME\tNUMSEQ\tTOTAL\tMIN\tAVG\tMAX\tQUALITY'
@@ -142,7 +142,7 @@ def parse_args():
                         metavar='LOG_FILE',
                         type=str,
                         help='record program progress in LOG_FILE')
-    parser.add_argument('fasta_files',
+    parser.add_argument('fastq_files',
         nargs='*',
         metavar='FASTQ_FILE',
         type=str,
@@ -150,8 +150,8 @@ def parse_args():
     return parser.parse_args()
 
 
-class FastaStats(object):
-    '''Compute various statistics for a FASTA file:
+class FastqStats(object):
+    '''Compute various statistics for a FASTQ file:
 
     num_seqs: the number of sequences in the file satisfying the minimum
        length requirement (minlen_threshold).
@@ -172,7 +172,7 @@ class FastaStats(object):
                  quality_scores_mean=None,
                  quality_scores_min=None,
                  quality_scores_max=None):
-        "Build an empty FastaStats object"
+        "Build an empty FastqStats object"
         self.num_seqs = num_seqs
         self.num_bases = num_bases
         self.min_len = min_len
@@ -185,30 +185,30 @@ class FastaStats(object):
 
 
     def __eq__(self, other):
-        "Two FastaStats objects are equal iff their attributes are equal"
+        "Two FastqStats objects are equal iff their attributes are equal"
         if type(other) is type(self):
             return self.__dict__ == other.__dict__
         else:
             return False
 
     def __repr__(self):
-        "Generate a printable representation of a FastaStats object"
-        return "FastaStats(num_seqs={}, num_bases={}, min_len={}, max_len={}, " \
+        "Generate a printable representation of a FastqStats object"
+        return "FastqStats(num_seqs={}, num_bases={}, min_len={}, max_len={}, " \
             "average={})".format(
                 self.num_seqs, self.num_bases, self.min_len, self.max_len,
                 self.average)
 
-    def from_file(self, fasta_file, read_size, minlen_threshold=DEFAULT_MIN_LEN):
-        '''Compute a FastaStats object from an input FASTA file.
+    def from_file(self, fastq_file, read_size, minlen_threshold=DEFAULT_MIN_LEN):
+        '''Compute a FastqStats object from an input FASTQ file.
 
         Arguments:
-           fasta_file: an open file object for the FASTA file
+           fastq_file: an open file object for the FASTQ file
            minlen_threshold: the minimum length sequence to consider in
-              computing the statistics. Sequences in the input FASTA file
+              computing the statistics. Sequences in the input FASTQ file
               which have a length less than this value are ignored and not
               considered in the resulting statistics.
         Result:
-           A FastaStats object
+           A FastqStats object
         '''
 
         #FASTQ addition
@@ -220,7 +220,7 @@ class FastaStats(object):
 
         num_seqs = num_bases = 0
         min_len = max_len = None
-        for seq in SeqIO.parse(fasta_file, "fastq"):
+        for seq in SeqIO.parse(fastq_file, "fastq"):
 
             # fastqe
 
@@ -247,7 +247,7 @@ class FastaStats(object):
 
 
 
-            # FASTA stat
+            # FASTQ stat
             this_len = len(seq.seq)
             if this_len >= minlen_threshold:
                 if num_seqs == 0:
@@ -313,15 +313,15 @@ class FastaStats(object):
         return self
 
     def pretty(self, filename):
-        '''Generate a pretty printable representation of a FastaStats object
+        '''Generate a pretty printable representation of a FastqStats object
         suitable for output of the program. The output is a tab-delimited
-        string containing the filename of the input FASTA file followed by
-        the attributes of the object. If 0 sequences were read from the FASTA
+        string containing the filename of the input FASTQ file followed by
+        the attributes of the object. If 0 sequences were read from the FASTQ
         file then num_seqs and num_bases are output as 0, and min_len, average
         and max_len are output as a dash "-".
 
         Arguments:
-           filename: the name of the input FASTA file
+           filename: the name of the input FASTQ file
         Result:
            A string suitable for pretty printed output
         '''
@@ -345,8 +345,8 @@ class FastaStats(object):
 
 
 def process_files(options):
-    '''Compute and print FastaStats for each input FASTA file specified on the
-    command line. If no FASTA files are specified on the command line then
+    '''Compute and print FastqStats for each input FASTQ file specified on the
+    command line. If no FASTQ files are specified on the command line then
     read from the standard input (stdin).
 
     Arguments:
@@ -419,22 +419,22 @@ def process_files(options):
 
 
 
-    if options.fasta_files:
-        for fasta_filename in options.fasta_files:
-            logging.info("Processing FASTA file from {}".format(fasta_filename))
+    if options.fastq_files:
+        for fastq_filename in options.fastq_files:
+            logging.info("Processing FASTQ file from {}".format(fastq_filename))
             try:
-                if fasta_filename.endswith(".gz"):
-                    fasta_file = gzip.open(fasta_filename, 'rt')
+                if fastq_filename.endswith(".gz"):
+                    fastq_file = gzip.open(fastq_filename, 'rt')
                 else:
-                    fasta_file = open(fasta_filename)
+                    fastq_file = open(fastq_filename)
 
             except IOError as exception:
                 exit_with_error(str(exception), EXIT_FILE_IO_ERROR)
             else:
-                with fasta_file:
+                with fastq_file:
 
-                    stats = FastaStats().from_file(fasta_file, read_size, options.minlen)
-                    print_output(stats,fasta_filename, mapping_dict, mapping_text, mapping_default, output_file, OUTPUT_OPTIONS, spacer = mapping_spacer)
+                    stats = FastqStats().from_file(fastq_file, read_size, options.minlen)
+                    print_output(stats,fastq_filename, mapping_dict, mapping_text, mapping_default, output_file, OUTPUT_OPTIONS, spacer = mapping_spacer)
 
 
     else:
@@ -449,13 +449,13 @@ def process_files(options):
         else:
             stdin_file = sys.stdin
 
-        stats = FastaStats().from_file(stdin_file, read_size, options.minlen)
+        stats = FastqStats().from_file(stdin_file, read_size, options.minlen)
         print_output(stats, "-", mapping_dict, mapping_text, mapping_default, output_file, OUTPUT_OPTIONS, spacer = mapping_spacer)
 
 
 
 
-def print_output(stats_object,fasta_filename, mapping_dict, mapping_text,mapping_default, output_file ,output_type, sep = "\t",spacer = " " ):
+def print_output(stats_object,fastq_filename, mapping_dict, mapping_text,mapping_default, output_file ,output_type, sep = "\t",spacer = " " ):
     '''
     :param stats_object:
     :param filename:
@@ -470,18 +470,18 @@ def print_output(stats_object,fasta_filename, mapping_dict, mapping_text,mapping
     '''
 
     if output_type == CASE_BOTH or output_type == CASE_MAX:
-        print(stats_object.pretty(fasta_filename), "max" + mapping_text,
+        print(stats_object.pretty(fastq_filename), "max" + mapping_text,
               map_scores(stats_object.quality_scores_maxs, mapping_dict=mapping_dict, default_value = mapping_default,spacer=spacer), sep=sep, file=output_file)
 
-    print(stats_object.pretty(fasta_filename), "mean" + mapping_text,
+    print(stats_object.pretty(fastq_filename), "mean" + mapping_text,
           map_scores(stats_object.quality_scores_mean, mapping_dict=mapping_dict,default_value = mapping_default,spacer=spacer), sep=sep,file=output_file)
 
     if output_type == CASE_BOTH or output_type == CASE_MIN:
-        print(stats_object.pretty(fasta_filename), "min" + mapping_text,
+        print(stats_object.pretty(fastq_filename), "min" + mapping_text,
               map_scores(stats_object.quality_scores_mins, mapping_dict=mapping_dict, default_value = mapping_default,spacer=spacer), sep=sep, file=output_file)
 
 
-    #print(stats_object.pretty(fasta_filename), "counts" + mapping_text,
+    #print(stats_object.pretty(fastq_filename), "counts" + mapping_text,
     #      nomap([a for a in stats_object.counts_per_position]
     #                 ), sep=sep,file=output_file)
 
