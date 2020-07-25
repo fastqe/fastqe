@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 seq_emoji_map = {
     'A': ':apple:',  # avocado? differnet colours?
@@ -191,5 +192,3 @@ fastq_noemoji_map = {
 'J': '█',
 
 }
-
-

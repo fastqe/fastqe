@@ -35,11 +35,11 @@ FASTQE started out as part of PyCon Au presentations:
   - clean up code
   - add binning
 - version 0.2.5 July 2020
-  - refactor code 
+  - refactor code
   - add long read support with --long
   - add --noemoji for block-based output on systems that don't support emoji
   - add --custom for user-defined mapping to emoji
-  - add --output to redirect to file instead of stdout 
+  - add --output to redirect to file instead of stdout
   - add gzip support
   - add redirect from stdin support
   - fix bug of dropping position if some sequences are only 0 quality
@@ -226,7 +226,7 @@ Binned scale:
 
 ## Custom
 
-Use a dictionary of [Pyemojify mappings](https://github.com/lord63/pyemojify/blob/master/pyemojify/emoji.py) in a text file instead of built in emoji choices: 
+Use a dictionary of [Pyemojify mappings](https://github.com/lord63/pyemojify/blob/master/pyemojify/emoji.py) in a text file instead of built in emoji choices:
 
 ```
 {
