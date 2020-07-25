@@ -542,7 +542,7 @@ def main():
     "Orchestrate the execution of the program"
     options = parse_args()
     init_logging(options.log)
-    if (!options.noheader):
+    if (not options.noheader):
         print(HEADER)
     process_files(options)
 
