@@ -543,7 +543,10 @@ def main():
     options = parse_args()
     init_logging(options.log)
     if (not options.noheader):
-        print(HEADER)
+        if(options.output):
+            print(HEADER,file=options.output)
+        else:
+            print(HEADER)
     process_files(options)
 
 
