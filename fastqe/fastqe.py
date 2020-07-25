@@ -50,8 +50,9 @@ EXIT_COMMAND_LINE_ERROR = 2
 EXIT_FASTA_FILE_ERROR = 3
 DEFAULT_MIN_LEN = 0
 DEFAULT_VERBOSE = False
+HEADER = 'Filename\tStatistic\tQualities'
 #HEADER = 'FILENAME\tNUMSEQ\tTOTAL\tMIN\tAVG\tMAX\tQUALITY'
-HEADER = '# FASTQE sequence quality for:'
+#HEADER = '# FASTQE sequence quality for:'
 DEFAULT_READ_LENGTH = 500
 PROGRAM_NAME = "fastqe"
 
@@ -123,6 +124,9 @@ def parse_args():
     parser.add_argument('--noemoji',
                         action='store_true',
                         help='use mapping without emoji (▁▂▃▄▅▆▇█)')
+    parser.add_argument('--noheader',
+        action='store_true',
+        help='Hide the header before sample output')
     parser.add_argument('--min',
         action='store_true',
         help='show minimum quality per position')
@@ -538,7 +542,8 @@ def main():
     "Orchestrate the execution of the program"
     options = parse_args()
     init_logging(options.log)
-    #print(HEADER)
+    if (!options.noheader):
+        print(HEADER)
     process_files(options)
 
 
