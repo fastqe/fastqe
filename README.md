@@ -1,7 +1,5 @@
 ![Example](docs/img/logo.png)
 
-by @LonsBio
-
 # FASTQ with Emoji = FASTQE 🤔
 
 Read one or more FASTQ files, [fastqe](https://fastqe.com/) will compute quality stats for each file and print those stats as emoji... for some reason.
@@ -12,65 +10,18 @@ Given a fastq file in Illumina 1.8+/Sanger format, calculate the mean (rounded) 
 
 https://fastqe.com/
 
-# History
-
-FASTQE started out as part of PyCon Au presentations:
-
-
-- PyCon Au 2016 - [Python for science, side projects and stuff!](https://www.youtube.com/watch?v=PCZS9wqBUuE)
-- PyCon Au 2017 - [Lightning Talk](https://youtu.be/WywQ6a3uQ5I?t=33m18s)
-
-<img src="docs/img/fastqe.png" class="img-fluid" alt="Responsive image">
-
-### Versions
-
-- version 0.0.1 at PyCon Au 2016:
-  - Mean position per read
-- version 0.0.2 at PyconAu 2017:
-  - update emoji map
-  - Max and minimum scores per position added
-  - Wrapper code based on early version of [Bionitio](https://github.com/bionitio-team/bionitio) added
-  - prepare for PyPi
-- version 0.1.0 July 2018
-  - clean up code
-  - add binning
-- version 0.2.5 July 2020
-  - refactor code 
-  - add long read support with --long
-  - add --noemoji for block-based output on systems that don't support emoji
-  - add --custom for user-defined mapping to emoji
-  - add --output to redirect to file instead of stdout 
-  - add gzip support
-  - add redirect from stdin support
-  - fix bug of dropping position if some sequences are only 0 quality
-
-# Limitations
-
-- ~Reads up to 500bp only~ Read length above 500bp allowed but must be set by user with `--long MAX_LENGTH`
-- Same emoji for all scores above 41
-
 # Install
 
-`pip` or BioConda
-
-
+Latest release versions of `fastqe` are available via `pip` or BioConda:
 
 `pip install fastqe`
 
-
 `conda install -c bioconda fastqe`
 
+## Development
 
-# Quickstart
+Development version can be isntall from this repository in the `master` branch. 
 
-
-`fastqe test.fastq`
-
-`fastqe --min test.fastq`
-
-`fastqe --max test.fastq`
-
-`fastqe --max -min -bin test.fastq`
 
 # Usage
 
@@ -105,9 +56,85 @@ optional arguments:
   --log LOG_FILE        record program progress in LOG_FILE
 ```
 
+
+## Convert
+
+`fastqe` will summarise FASTQ files to display the max, mean and minumum quality using emoji. To convert a file into this format, rather than summarise, you can use the companion program `biomojify` that will convert both sequence and quality information to emoji:
+
+```
+$ cat test.fq
+@ Sequence
+GTGCCAGCCGCCGCGGTAGTCCGACGTGGC
++
+GGGGGGGGGGGGGGGGGGGGGG!@#$%&%(
+```
+
+```
+$ biomojify fastq test.fq
+▶️  Sequence
+🍇🍅🍇🌽🌽🥑🍇🌽🌽🍇🌽🌽🍇🌽🍇🍇🍅🥑🍇🍅🌽🌽🍇🥑🌽🍇🍅🍇🍇🌽
+😁😁😁😁😁😁😁😁😁😁😁😁😁😁😁😁😁😁😁😁😁😁🚫😄👺💔🙅👾🙅💀
+```
+
+Intall with `pip install biomojify`, and see the `biomojify` page for more information: https://github.com/fastqe/biomojify/
+
+
+
+# Quickstart
+
+`fastqe test.fastq`
+
+`fastqe --min test.fastq`
+
+`fastqe --max test.fastq`
+
+`fastqe --max -min -bin test.fastq`
+
+# History
+
+FASTQE started out as part of PyCon Au presentations:
+
+
+- PyCon Au 2016 - [Python for science, side projects and stuff!](https://www.youtube.com/watch?v=PCZS9wqBUuE)
+- PyCon Au 2017 - [Lightning Talk](https://youtu.be/WywQ6a3uQ5I?t=33m18s)
+- BCC 2020 - Short Presentaion
+
+<img src="docs/img/fastqe.png" class="img-fluid" alt="Responsive image">
+
+### Versions
+
+- version 0.0.1 at PyCon Au 2016:
+  - Mean position per read
+- version 0.0.2 at PyconAu 2017:
+  - update emoji map
+  - Max and minimum scores per position added
+  - Wrapper code based on early version of [Bionitio](https://github.com/bionitio-team/bionitio) added
+  - prepare for PyPi
+- version 0.1.0 July 2018
+  - clean up code
+  - add binning
+- version 0.2.6 July 2020
+  - refactor code
+  - add long read support with --long
+  - add --noemoji for block-based output on systems that don't support emoji
+  - add --custom for user-defined mapping to emoji
+  - add --output to redirect to file instead of stdout
+  - add gzip support
+  - add redirect from stdin support
+  - fix bug of dropping position if some sequences are only 0 quality
+-  Galaxy Wrapper created July 2020
+- `biomojify` created July 2020
+
+# Limitations
+
+- ~Reads up to 500bp only~ Read length above 500bp allowed but must be set by user with `--long MAX_LENGTH`
+- Same emoji for all scores above 41
+
+
+
 ## Licence
 
-This program is released as open source software under the terms of [MIT License](https://raw.githubusercontent.com/fastqe/fastqe/master/LICENSE)
+This program is released as open source software under the terms of [BSD License](https://raw.githubusercontent.com/fastqe/fastqe/master/LICENSE)
 
 
 ## Dependencies
@@ -120,13 +147,15 @@ This program is released as open source software under the terms of [MIT License
 ## Roadmap
 
 - [x] Rearrange emoji to use more realistic ranges (i.e > 60 use uncommon emoji) and remove inconsistencies
-- [ ] Add conversion to emoji sequence format, with/without binning, for compressed fastq data
+- [x] ~Add conversion to emoji sequence format, with/without binning, for compressed fastq data~ fits into https://github.com/fastqe/biomojify/
 - [ ] Rewrite conversion to standalone function for use in iPython etc.
 - [ ] Teaching resources
 - [ ] Test data and unit tests
-- [ ] Add FASTA mode for nucleotide and proteins emoji
+- [x] ~Add FASTA mode for nucleotide and proteins emoji~ see https://github.com/fastqe/biomojify/
 - [ ] MultiQC plugin
+- [ ] ~Galaxy Wrapper~: avialable form the [IUC toolshed](https://toolshed.g2.bx.psu.edu/repository?repository_id=13576f42f394cfb6) 
 
+Rather convert to emoji than summarise? We've just started `biomojify` for that: https://github.com/fastqe/biomojify/
 
 ## Scale
 
@@ -232,6 +261,17 @@ Use a dictionary of [Pyemojify mappings](https://github.com/lord63/pyemojify/blo
 '#': ':no_entry_sign:',
 '\"': ':x:',
 '!': ':japanese_goblin:',
+'$': ':broken_heart:'
+}
+```
+
+Emoji characters can also be used directlty instead (experimental):
+
+```
+{
+'#': ':no_entry_sign:',
+'\"': ':x:',
+'!': '👿',
 '$': ':broken_heart:'
 }
 ```
