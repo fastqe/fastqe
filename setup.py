@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 LONG_DESCRIPTION = \
 '''The program reads one or more input FASTQ files.
 For each file it computes the minimum, maximum and mean FASTQ quality score at each position across all reads in a file.
