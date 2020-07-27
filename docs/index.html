@@ -51,7 +51,7 @@ Compute quality stats for FASTQ files and print those stats as emoji... for some
           <div class="col-lg-6">
 
             <h4>Install</h4>
-          <p>  Python 3 required. Tested ( a little bit) on Linux and Mac. Windows status unknown.
+          <p>  Python 3 required. Tested on Linux and Mac. <br> Windows partially suported and requires Windows Terminal.
             </p>
         <p><kbd>pip install fastqe</kbd></p>
             <h4>Usage</h4>
@@ -97,15 +97,38 @@ Compute quality stats for FASTQ files and print those stats as emoji... for some
           </tr>
         </table>
         <br>
-        <p>
-        Future work aims to add converting FASTQ files to this format for compression.
-          </p>
+   
 
 
           </div>
 
           <div class="col-lg-6">
 
+            <h4>Biomojify</h4>
+              
+                   <p>
+                     
+A companion program, <kbd>biomojify</kbd>, will convert sequences rather than summarise them:
+                     
+                     <div>
+                     
+$ biomojify fasta test.fasta <br>
+▶️ SEQUENCE_1 <br>
+🥑🍅🥑🍇🍅🌽🥑🍇🍅🥑🌽🍇🍅🥑🍇🍅🌽🍇🥑🍅🍇🌽🍅🥑🍇🌽🍅🥑🍇🍅🥑🍇🍇<br>
+🍇🍇🍇🍇🌽🍅🍇🥑🍅🍇🥑🍅🍇🍅🥑🍇🌽🍅🌽🍇🥑🍅🌽🍇🍅🥑🌽🍇🍅🥑🌽🍇🍅<br>
+🥑🌽🍇🌽🍅🍇🥑🍇🍅🌽🥑🍇🍅🍇🌽🥑🌽🍇🍅🥑🌽🍇🌽🍅🍇🌽🥑🍅🍇🌽🌽❓🍅<br>
+🥑🍇❓🌽🍅🥑🥑🥑🥑🍇❓🌽🍅🥑❓🍇🌽🍅🥑🍇🌽❓🍅🥑❓🍇🌽🍅🍇🥑🌽🍅❓<br>
+🥑🍇❓🍅🍇🥑🌽🍅🍇🌽❓🍅🌽🍇🍅🌽🍇❓🥑🍅🌽🥑🍅🍇🍅🥑🌽🍇🍅🥑🍇🌽🍇<br>
+🥑🍇🌽🍅🍅🍅🍅🍅🍅🍅🥑🍇🍅🍇🍅🥑🌽🍇🍅🥑🍇🍅🥑🌽🍅🥑🌽🌽🌽🌽🌽🌽🌽<br>
+🌽🌽🍇🍅🥑🌽🍇🍅🥑🌽🍇🍅🥑🌽🍇🍅🌽🥑🌽🍇🍅🍇🌽🍅🍇🥑🌽🍅❓❓❓🥑🌽<br>
+🍇🥑🍅🌽🍇🍅🥑🍇🍅🥑🍇🌽🍅🍇🥑🌽🍅🍇🥑🍅🍇🌽🍅 <br>
+                       </div>
+                     <br> 
+See that project page for more information: <a href="https://github.com/fastqe/biomojify">https://github.com/fastqe/biomojify</a>
+            </p>
+              
+              
+            
             <h4>Feedback</h4>
               <p> Submit <a href="https://github.com/lonsbio/fastqe/issues/new">bugs, enhancements and feedback via GitHub</a>.</p>
 
@@ -115,8 +138,9 @@ Compute quality stats for FASTQ files and print those stats as emoji... for some
               <p>There is lots of room for improvement in this tool. The majority of the  code has been
                 written in the hours (and minutes) prior to presentations, so its almost guaranteed to be suboptimal.
                 Pull requests welcome on <a  target="_blank"  href="https://github.com/fastqe/fastqe/">GitHub</a>.
-                <br>
-                Development of FASTQE continues, and you can get involved by talking to us on Gitter (https://gitter.im/fastqe/contact)
+                <br/>
+                Development of FASTQE continues, and you can get involved by talking to us on <a href="https://gitter.im/fastqe/general">Gitter</a> or use the <b>Open Chat</b> button below.
+                <br/>
                 <script>
   ((window.gitter = {}).chat = {}).options = {
     room: 'fastqe/general'
