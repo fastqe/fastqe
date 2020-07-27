@@ -90,6 +90,31 @@ Intall with `pip install biomojify`, and see the `biomojify` page for more infor
 
 `fastqe --max -min -bin test.fastq`
 
+
+# Teaching Materials
+
+## Command line and NGS Introduction
+
+This lesson introduces NGS process in the command line using by using the results of FASTQE before and after quality filerting
+using `fastp`:
+
+[https://qubeshub.org/publications/1092/2](https://qubeshub.org/publications/1092/2) 
+
+```
+Rachael St. Jacques, Max Maza, Sabrina Robertson, Guoqing Lu, Andrew Lonsdale, Ray A Enke (2019).
+A Fun Introductory Command Line Exercise: Next Generation Sequencing Quality Analysis with Emoji!.
+NIBLSE Incubator: Intro to Command Line Coding Genomics Analysis, (Version 2.0).
+QUBES Educational Resources. doi:10.25334/Q4D172
+
+```
+
+## Galaxy
+
+A Galaxy wrapper is available from the [IUC toolshed](https://toolshed.g2.bx.psu.edu/repository?repository_id=13576f42f394cfb6). Contact your Galaxy Admin
+ if you would like to have it installed. A Galaxy Tutorial using FASTQE is in development.
+
+![FASTQE in Galaxy](docs/img/galaxy_full.png)
+
 # History
 
 FASTQE started out as part of PyCon Au presentations:
@@ -153,9 +178,24 @@ This program is released as open source software under the terms of [BSD License
 - [ ] Test data and unit tests
 - [x] ~Add FASTA mode for nucleotide and proteins emoji~ see https://github.com/fastqe/biomojify/
 - [ ] MultiQC plugin
-- [ ] ~Galaxy Wrapper~: avialable form the [IUC toolshed](https://toolshed.g2.bx.psu.edu/repository?repository_id=13576f42f394cfb6) 
+- [ ] ~Galaxy Wrapper~: available form the [IUC toolshed](https://toolshed.g2.bx.psu.edu/repository?repository_id=13576f42f394cfb6) 
 
 Rather convert to emoji than summarise? We've just started `biomojify` for that: https://github.com/fastqe/biomojify/
+
+# Contributors
+
+- Andrew Lonsdale 
+- Björn Grüning 
+- Catherine Bromhead 
+- Clare Sloggett 
+- Clarissa Womack 
+- Helena Rasche 
+- Maria Doyle 
+- Michael Franklin 
+- Nicola Soranzo
+- Phil Ewels
+
+
 
 ## Scale
 
