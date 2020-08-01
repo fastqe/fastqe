@@ -13,7 +13,7 @@ variety of statistics, and then prints a summary of the statistics as output....
 '''
 
 from __future__ import print_function
-from argparse import ArgumentParser, FileType
+from argparse import ArgumentParser, FileType, Namespace
 from math import floor
 import sys
 from Bio import SeqIO
@@ -552,7 +552,11 @@ def main():
     "Orchestrate the execution of the program"
     options = parse_args()
     init_logging(options.log)
-    #print(HEADER)
+    if (not options.noheader):
+        if(options.output):
+            print(HEADER,file=options.output)
+        else:
+            print(HEADER)
     process_files(options)
 
 
