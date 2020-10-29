@@ -24,7 +24,6 @@ import numpy as np
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC
 from Bio.SeqIO import QualityIO
 from . import fastqe_map as emaps # todo make maps illumin 1.9 specific etc
 import os
