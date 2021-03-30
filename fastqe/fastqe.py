@@ -34,17 +34,17 @@ import binascii
 
 
 #PyCharm testing command line processing
-sys.argv = [
-    __file__,
-    '--bin',
-    '--long','3000',
+#sys.argv = [
+#    __file__,
+#    '--bin',
+#    '--long','3000',
  #   '--output', 'testouput.txt',
  #   '--custom',
  #   'test/test_dict.txt',
-    'test/test_short_seq.fq',
+#    'test/test_short_seq.fq',
 #    'test/test.fastq',
 #    'test/test_wiki.fq',
-]
+#]
 
 
 EXIT_FILE_IO_ERROR = 1
