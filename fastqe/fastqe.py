@@ -24,7 +24,7 @@ import numpy as np
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC
+#from Bio.Alphabet import IUPAC
 from Bio.SeqIO import QualityIO
 from . import fastqe_map as emaps # todo make maps illumin 1.9 specific etc
 import os
@@ -34,17 +34,17 @@ import binascii
 
 
 #PyCharm testing command line processing
-# sys.argv = [
-#    __file__,
-#    '--bin',
-#    '--long','3000',
-# #   '--output', 'testouput.txt',
-# #   '--custom',
-# #   'test/test_dict.txt',
-#    'test/test_short_seq.fq',
+sys.argv = [
+    __file__,
+    '--bin',
+    '--long','3000',
+ #   '--output', 'testouput.txt',
+ #   '--custom',
+ #   'test/test_dict.txt',
+    'test/test_short_seq.fq',
 #    'test/test.fastq',
 #    'test/test_wiki.fq',
-# ]
+]
 
 
 EXIT_FILE_IO_ERROR = 1
