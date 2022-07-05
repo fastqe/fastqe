@@ -57,6 +57,9 @@ optional arguments:
 ```
 
 
+#### GPU
+
+
 ## Convert
 
 `fastqe` will summarise FASTQ files to display the max, mean and minumum quality using emoji. To convert a file into this format, rather than summarise, you can use the companion program `biomojify` that will convert both sequence and quality information to emoji:
