@@ -34,7 +34,7 @@ fastq_emoji_map = {
     '2': ':fire:',
     '3': ':rage:',
     '4': ':poop:',
-    '5': "🚨️", # #':warning:',
+    '5': "🚨", # #':warning:',
     '6': ':grinning:',
     '7': ':sweat_smile:',
     '8': ':smirk:',
@@ -98,7 +98,6 @@ fastq_emoji_map_binned= {
 '7': '🚨',#:warning:',
 '8': '🚨',#:warning:',
 '9': '🚨',#:warning:',
-
 
 #25–29 27
 ':': ':smile:',
