@@ -23,7 +23,7 @@ setup(
     license = 'BSD-3-Clause',
     entry_points = {'console_scripts': ['fastqe = fastqe.fastqe:main']},
     install_requires = ["biopython>=1.66",'pyemojify'],
-    setup_requires = ['twine>=1.11.0', 'setuptools>=38.6.'],
+    setup_requires = ['twine>=1.11.0', 'setuptools>=38.6'],
     packages = find_packages(exclude=('test', 'docs')),
     classifiers = [
         'Development Status :: 4 - Beta',
