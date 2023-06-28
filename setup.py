@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 # Remember to change when making a new release
-version = '0.2.7'
+version = '0.3.0'
 dl_version = 'master' if 'dev' in version else 'v{}'.format(version)
 
 with open('README.md') as f:
