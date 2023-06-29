@@ -521,7 +521,7 @@ def print_output(stats_object,fastq_filename, mapping_dict, mapping_text,mapping
     :return:
     '''
 
-    if output_type == CASE_HTML or CASE_HTML_ESCAPE:
+    if output_type == CASE_HTML or output_type == CASE_HTML_ESCAPE:
 
 
         # we extract scores, merge, and then re-create the fake seq
