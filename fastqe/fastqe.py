@@ -767,10 +767,10 @@ def init_logging(log_filename):
         logging.info('program started')
         logging.info('command line: {0}'.format(' '.join(sys.argv)))
 
-def run_fastqe(fasta_files,minlen=0,scale=False,version=False,
+def run_fastqe(fastq_files,minlen=0,scale=False,version=False,
                mean = True,custom=None,noemoji=False,min=False,max=False,
                output=None,long=None,log=None,bin=False,html=False,html_escape=False,noheader=False, window=1):
-    options = Namespace(bin=bin, custom=custom, fastq_files=fasta_files,log=log, long=long, max=max, mean=mean, min=min, minlen=minlen, noemoji=noemoji, output=output, scale=scale, version=version,html=html,html_escape=html_escape,noheader=noheader, window=window)
+    options = Namespace(fastq_files, bin=bin, custom=custom,log=log, long=long, max=max, mean=mean, min=min, minlen=minlen, noemoji=noemoji, output=output, scale=scale, version=version,html=html,html_escape=html_escape,noheader=noheader, window=window)
     if options.version:
         print(PROGRAM_NAME,PROGRAM_VERSION)
         return
