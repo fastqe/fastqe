@@ -1,0 +1,154 @@
+@article{cock_sanger_2010,
+        title = {The {Sanger} {FASTQ} file format for sequences with quality scores, and the {Solexa}/{Illumina} {FASTQ} variants},
+        volume = {38},
+        issn = {0305-1048},
+        url = {https://academic.oup.com/nar/article/38/6/1767/3112533},
+        doi = {10.1093/nar/gkp1137},
+        abstract = {ABSTRACT.  FASTQ has emerged as a common file format for sharing sequencing read data combining both the sequence and an associated per base quality score, desp},
+        language = {en},
+        number = {6},
+        urldate = {2020-02-03},
+        journal = {Nucleic Acids Research},
+        author = {Cock, Peter J. A. and Fields, Christopher J. and Goto, Naohisa and Heuer, Michael L. and Rice, Peter M.},
+        month = apr,
+        year = {2010},
+        pages = {1767--1771}
+}
+
+@article{pearson_improved_1988,
+        title = {Improved tools for biological sequence comparison},
+        volume = {85},
+        issn = {0027-8424, 1091-6490},
+        url = {https://www.pnas.org/content/85/8/2444},
+        doi = {10.1073/pnas.85.8.2444},
+        abstract = {We have developed three computer programs for comparisons of protein and DNA sequences. They can be used to search sequence data bases, evaluate similarity scores, and identify periodic structures based on local sequence similarity. The FASTA program is a more sensitive derivative of the FASTP program, which can be used to search protein or DNA sequence data bases and can compare a protein sequence to a DNA sequence data base by translating the DNA data base as it is searched. FASTA includes an additional step in the calculation of the initial pairwise similarity score that allows multiple regions of similarity to be joined to increase the score of related sequences. The RDF2 program can be used to evaluate the significance of similarity scores using a shuffling method that preserves local sequence composition. The LFASTA program can display all the regions of local similarity between two sequences with scores greater than a threshold, using the same scoring parameters and a similar alignment algorithm; these local similarities can be displayed as a "graphic matrix" plot or as individual alignments. In addition, these programs have been generalized to allow comparison of DNA or protein sequences based on a variety of alternative scoring matrices.},
+        language = {en},
+        number = {8},
+        urldate = {2020-02-03},
+        journal = {Proceedings of the National Academy of Sciences},
+        author = {Pearson, W. R. and Lipman, D. J.},
+        month = apr,
+        year = {1988},
+        pmid = {3162770},
+        pages = {2444--2448}
+}
+
+
+@article{cock_biopython_2009,
+        title = {Biopython: freely available {Python} tools for computational molecular biology and bioinformatics},
+        volume = {25},
+        issn = {1367-4803},
+        shorttitle = {Biopython},
+        url = {https://academic.oup.com/bioinformatics/article/25/11/1422/330687},
+        doi = {10.1093/bioinformatics/btp163},
+        abstract = {Abstract.  Summary: The Biopython project is a mature open source international collaboration of volunteer developers, providing Python libraries for a wide ran},
+        language = {en},
+        number = {11},
+        urldate = {2020-02-03},
+        journal = {Bioinformatics},
+        author = {Cock, Peter J. A. and Antao, Tiago and Chang, Jeffrey T. and Chapman, Brad A. and Cox, Cymon J. and Dalke, Andrew and Friedberg, Iddo and Hamelryck, Thomas and Kauff, Fr
+ank and Wilczynski, Bartek and de Hoon, Michiel J. L.},
+        month = jun,
+        year = {2009},
+        pages = {1422--1423}
+}
+
+
+
+
+
+@misc{fastqc,
+  address = {{Babraham, UK}},
+  title = {{{FastQC}}},
+  copyright = {GPL v3},
+  abstract = {FastQC aims to provide a simple way to do some quality control checks on raw sequence data coming from high throughput sequencing pipelines. It provides a modular set of analyses which you can use to give a quick impression of whether your data has any problems of which you should be aware before doing any further analysis.},
+  howpublished = {Babraham Institute},
+  author = {Andrews, Simon and Krueger, Felix and {Segonds-Pichon}, Anne and Biggins, Laura and Krueger, Christel and Wingett, Steven},
+  month = jan,
+  year = {2012}
+}
+
+
+
+
+@misc{sequence-analysis-quality-control,
+author = "Bérénice Batut and Maria Doyle and Alexandre Cormier and Anthony Bretaudeau and Laura Leroi and Erwan Corre and Stéphanie Robin and Cameron Hyde",
+	title = "Quality Control (Galaxy Training Materials)",
+	year = "",
+	month = "",
+	day = ""
+	url = "\url{https://training.galaxyproject.org/training-material/topics/sequence-analysis/tutorials/quality-control/tutorial.html}",
+	note = "[Online; accessed Sat Oct 26 2024]"
+}
+
+
+
+@ARTICLE{falco,
+  title     = "Falco: high-speed {FastQC} emulation for quality control of
+               sequencing data",
+  author    = "de Sena Brandine, Guilherme and Smith, Andrew D",
+  journal   = "F1000Res.",
+  publisher = "F1000 Research Ltd",
+  volume    =  8,
+  pages     =  1874,
+  abstract  = "Quality control is an essential first step in sequencing data
+               analysis, and software tools for quality control are deeply
+               entrenched in standard pipelines at most sequencing centers.
+               Although the associated computations are straightforward, in many
+               settings the total computing effort required for quality control
+               is appreciable and warrants optimization. We present Falco, an
+               emulation of the popular FastQC tool that runs on average three
+               times faster while generating equivalent results. Compared to
+               FastQC, Falco also requires less memory to run and provides more
+               flexible visualization of HTML reports.",
+  month     =  nov,
+  year      =  2019,
+  keywords  = "FastQC; high-throughput sequencing; quality control",
+  language  = "en"
+}
+
+@ARTICLE{fastp,
+  title     = "fastp: an ultra-fast all-in-one {FASTQ} preprocessor",
+  author    = "Chen, Shifu and Zhou, Yanqing and Chen, Yaru and Gu, Jia",
+  journal   = "Bioinformatics",
+  publisher = "Oxford University Press (OUP)",
+  volume    =  34,
+  number    =  17,
+  pages     = "i884--i890",
+  abstract  = "Motivation: Quality control and preprocessing of FASTQ files are
+               essential to providing clean data for downstream analysis.
+               Traditionally, a different tool is used for each operation, such
+               as quality control, adapter trimming and quality filtering. These
+               tools are often insufficiently fast as most are developed using
+               high-level programming languages (e.g. Python and Java) and
+               provide limited multi-threading support. Reading and loading data
+               multiple times also renders preprocessing slow and I/O
+               inefficient. Results: We developed fastp as an ultra-fast FASTQ
+               preprocessor with useful quality control and data-filtering
+               features. It can perform quality control, adapter trimming,
+               quality filtering, per-read quality pruning and many other
+               operations with a single scan of the FASTQ data. This tool is
+               developed in C++ and has multi-threading support. Based on our
+               evaluation, fastp is 2-5 times faster than other FASTQ
+               preprocessing tools such as Trimmomatic or Cutadapt despite
+               performing far more operations than similar tools. Availability
+               and implementation: The open-source code and corresponding
+               instructions are available at https://github.com/OpenGene/fastp.",
+  month     =  sep,
+  year      =  2018,
+  language  = "en"
+}
+
+@ARTICLE{jaques,
+  title     = "A fun introductory command line lesson: Next generation
+               sequencing quality analysis with emoji!",
+  author    = "St. Jacques, Rachael M and Maza, William M and Robertson, Sabrina
+               D and Lonsdale, Andrew and Murray, Caylin S and Williams, Jason J
+               and Enke, Ray A",
+  journal   = "CourseSource",
+  publisher = "CourseSource",
+  volume    =  8,
+  year      =  2021
+}
+
+
