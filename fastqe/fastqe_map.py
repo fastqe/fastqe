@@ -47,7 +47,7 @@ fastq_emoji_map = {
     '=': ':smiley:',
     '?': ':laughing:',
     'A': ':yum:',
-    'B': ':relaxed:',
+    'B': ':relieved:', # was :relaxed:
     'D': ':stuck_out_tongue:',
     'C': ':stuck_out_tongue_closed_eyes:',
     'E': ':stuck_out_tongue_winking_eye:',
