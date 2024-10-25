@@ -149,6 +149,11 @@ FASTQE started out as part of PyCon Au presentations:
   - fix bug of dropping position if some sequences are only 0 quality
 -  Galaxy Wrapper created July 2020
 - `biomojify` created July 2020
+- version 0.2.7 2021
+  - bugfix
+- version 0.3.1 2023
+  - HTML reporting for Galaxy 
+
 
 # Limitations
 
@@ -221,7 +226,7 @@ Use the `--scale` option to include in output.
 17 2 🔥
 18 3 😡
 19 4 💩
-20 5 ⚠️
+20 5 🚨
 21 6 😀
 22 7 😅
 23 8 😏
@@ -268,11 +273,11 @@ Binned scale:
 17 2 💩
 18 3 💩
 19 4 💩
-20 5 ⚠️
-21 6 ⚠️
-22 7 ⚠️
-23 8 ⚠️
-24 9 ⚠️
+20 5 🚨
+21 6 🚨
+22 7 🚨
+23 8 🚨
+24 9 🚨
 25 : 😄
 26 ; 😄
 27 < 😄
