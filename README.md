@@ -153,6 +153,8 @@ FASTQE started out as part of PyCon Au presentations:
   - bugfix
 - version 0.3.1 2023
   - HTML reporting for Galaxy 
+- version 0.3.3 2024
+  - Update emoji that render in default fonts with alternatives
 
 
 # Limitations
