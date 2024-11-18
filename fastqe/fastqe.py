@@ -243,7 +243,7 @@ class FastqStats(object):
         #FASTQ addition
         # works for up to 500bp reads
         means = np.zeros(read_size)
-        mins = np.zeros(read_size)
+        mins = np.full(read_size,np.inf) # set minimum to inf so any value observed is smaller
         maxs = np.zeros(read_size)
         counts = np.zeros(read_size) # how often this position has a value - for long reads
 
