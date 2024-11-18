@@ -39,7 +39,7 @@ The interpretability of emoji in education and outreach is also important, espec
 
 # Design
 
-The design of the FASTQE employs an algorithm to parse FASTQ[@cock_sanger_2010] format files, calculate summary statistics for each base position, and then translate those summary statistics directly to emoji. For clarity, a FASTQ file will contain one or more sequences in a four line format of an @ led identifier, sequence, + led text and quality respectivley: 
+The design of the FASTQE employs an algorithm to parse FASTQ[@cock_sanger_2010] format files, calculate summary statistics for each base position, and then translate those summary statistics directly to emoji. For clarity, a FASTQ file will contain one or more sequences in a four line format of an @ led identifier, sequence, + led text and quality respectively: 
 ```
 @SEQUENCE_ID
 CAACTACAGCTGTTATACTTAGTCTGTAGATATATTAGGGAAGTGAGCTAATTACTATCC
@@ -50,11 +50,11 @@ The quality line uses ASCII characters to encode the Phred quality score for the
 
 Q = -10 * log10(P)
 
-with typical Q scores between 0 and 40 observed, though higher are possible. The higher the Q score, the higher the probabiltiy of a correct base call. 
+with typical Q scores between 0 and 40 observed, though higher are possible. The higher the Q score, the higher the probability of a correct base call. 
 
-For a given file, every FASTQ sequence is processed using BioPython [@biopython] sequence utilities to extract the numerical qualities. These numerical quality scores at each position are then used to create arrays of the average quality Q score for each position (minimum and maximum are also optional), rounded to the nearest whole interger. To account for recent long-read technologies with variable read lengths, the arrays are dynamically expanded to ensure memory is sued effieciently. 
+For a given file, every FASTQ sequence is processed using BioPython [@biopython] sequence utilities to extract the numerical qualities. These numerical quality scores at each position are then used to create arrays of the average quality Q score for each position (minimum and maximum are also optional), rounded to the nearest whole integer. To account for recent long-read technologies with variable read lengths, the arrays are dynamically expanded to ensure memory is used efficiently. 
 
-The calculated summary values are then used to create a representative sequence record for each file, where the Q score encodings are calculated from the summary statistics. The ASCII encoded versions of these are then extracted, and Python dictionary lookups are used to map the summary Phred score to an emoji.  The default mappings with Phred score, ASCII character and emoji are listed in following table. Binning into simplified emoji is also available to improve impact and reduce visual clutter. 
+The calculated summary values are then used to create a representative sequence record for each file, where the Q score encodings are calculated from the summary statistics. The ASCII encoded versions of these are then extracted, and Python dictionary lookups are used to map the summary Phred score to an emoji.  The default mappings with Phred score, ASCII character and emoji are listed in the following table. Binning into simplified emoji is also available to improve impact and reduce visual clutter. 
 
 | Phred | Symbol | Emoji | Emoji (Binned) | Phred | Symbol | Emoji | Emoji (Binned)  | Phred | Symbol | Emoji | Emoji (Binned)  |
 |------|--------|---------|---------|------|--------|---------|---------|------|--------|---------|---------|
@@ -99,7 +99,7 @@ sample.50bp.filtered.fastq.gz   mean (binned)   😆 😆 😆 😆 😆 😆 �
 😆 😄 😄 💩
 ```
 
-An alternative to emoji can also be used with the `--noemoji` option. In this mode  ASCII boxes can be used to proportionally indicate sequence quality with the height of the box proportioanl to a higher PHRED score. 
+An alternative to emoji can also be used with the `--noemoji` option. In this mode  ASCII boxes can be used to proportionally indicate sequence quality with the height of the box proportional to a higher PHRED score. 
 
 ```
 $ fastqe --noemoji sample.50bp.fastq.gz	
@@ -125,10 +125,10 @@ Other options include log files, ignoring sequences below a minimum length from 
 
 # Conclusion
 
-FASTQE is a software tool that serves both a practical and educational purpose. It can be adapted for many purposes. A resource on sequence quality suitable for high school and undergraduate students has also been developed [@jacques], and it has also been used in short courses and bioinformatics training [@batut] in [Galaxy](https://usegalaxy.org). Future development includes an enhanced HTML output format for better integration with browser accesible tools such as Galaxy. Everyone knows that using emoji to visualise biological sequencing data is a silly idea. We have shown here that maybe it isn’t as silly as it sounds.
+FASTQE is a software tool that serves both a practical and educational purpose. It can be adapted for many purposes. A resource on sequence quality suitable for high school and undergraduate students has also been developed [@jacques], and it has also been used in short courses and bioinformatics training [@batut] in [Galaxy](https://usegalaxy.org). Future development includes an enhanced HTML output format for better integration with browser accessible tools such as Galaxy. Everyone knows that using emoji to visualise biological sequencing data is a silly idea. We have shown here that maybe it isn’t as silly as it sounds.
 
 # Acknowledgements
 
-Thanks to the users of FASTQE.  We would also like to thank Ray Enke and the NIBLES incubator team for developing teaching materials using FASTQE.  We would like to acknowledge contributions to FASTQE, including during the BCC2020 CoFest: Björn Grüning, Catherine Bromhead, Clare Sloggett, Clarissa Womack, Helena Rasche, Maria Doyle, Michael Franklin, Nicola Soranzo, Phil Ewels. Additional thanks to Clare Slogget for manuscript feedback, and the PyCon Au 2024 academic team Maia Sauren and Alan Rubin. 
+Thanks to the users of FASTQE.  We would also like to thank Ray Enke and the NIBLES incubator team for developing teaching materials using FASTQE.  We would like to acknowledge contributions to FASTQE, including during the BCC2020 CoFest: Björn Grüning, Catherine Bromhead, Clare Sloggett, Clarissa Womack, Helena Rasche, Maria Doyle, Michael Franklin, Nicola Soranzo, Phil Ewels. Additional thanks to Clare Slogget and Genevieve Buckley for manuscript feedback, and the PyCon Au 2024 academic team Maia Sauren and Alan Rubin. 
 
 # References
