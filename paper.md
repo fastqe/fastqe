@@ -23,11 +23,7 @@ bibliography: paper.bib
 
 # Summary
 
-Bioinformatics is the science 🧑🏻‍🔬 of understanding and analysing biological information 💡, such as the genetic information contained in DNA 🧬. Modern scientific equipment can measure biological sequences with high accuracy 🎯, yet no technology is flawless and called nucleotide bases can be wrong ❌. Data quality issues need to be assessed and addressed to ensure confidence in downstream interpretation 📝 in medicine and science.
-
-FASTQE 🤔 is a utility for viewing the quality of biological sequence data by using emoji 😂. It summarises the average quality score for each position in a set of biological sequence measurements, and transcribes that average quality into a corresponding emoji to see the good 😍, the bad 💩,and the ugly 💀 of sequencing data.  When invoked from the command line it can also display the minimum 📉 and maximum 📈 quality scores per position, and bin quality 🗑️ scores into a reduced set of emoji. Custom emoji can also be used 🐍 🌵 👍.
-
-FASTQE can be used to rapidly 🏃 assess the quality of sequence data. It also helps transform complex 🤯 bioinformatics data into engaging, emoji-based visualisations 📊, making bioinformatics concepts more accessible 😌 and adding an element of fun 🤪 to scientific education 📚 and communication 🗣️.
+Bioinformatics is the science 🧑🏻‍🔬 of understanding and analysing biological information 💡, such as the genetic information contained in DNA 🧬. Modern scientific equipment can measure biological sequences with high accuracy 🎯, yet no technology is flawless and called nucleotide bases can be wrong ❌. Data quality issues need to be assessed and addressed to ensure confidence in downstream interpretation 📝 in medicine and science. FASTQE 🤔 is a utility for viewing the quality of biological sequence data by using emoji 😂. It summarises the average quality score for each position in a set of biological sequence measurements, and transcribes that average quality into a corresponding emoji to see the good 😍, the bad 💩,and the ugly 💀 of sequencing data.  When invoked from the command line it can also display the minimum 📉 and maximum 📈 quality scores per position, and bin quality 🗑️ scores into a reduced set of emoji. Custom emoji can also be used 🐍 🌵 👍. FASTQE can be used to rapidly 🏃 assess the quality of sequence data. It also helps transform complex 🤯 bioinformatics data into engaging, emoji-based visualisations 📊, making bioinformatics concepts more accessible 😌 and adding an element of fun 🤪 to scientific education 📚 and communication 🗣️.
 
 # Statement of need
 
@@ -39,7 +35,7 @@ The interpretability of emoji in education and outreach is also important, espec
 
 # Design
 
-FASTQE employs a simple algorithm to analyse FASTQ format files. For clarity, a FASTQ file will contain one or more sequences in a four line format of an @ led identifier, sequence, + led text and quality respectivley: 
+The design of the FASTQE employs an algorithm to parse FASTQ[@cock_sanger_2010] format files, calculate summary statistics for each base position, and then translate those summary statistics directly to emoji. For clarity, a FASTQ file will contain one or more sequences in a four line format of an @ led identifier, sequence, + led text and quality respectivley: 
 ```
 @SEQUENCE_ID
 CAACTACAGCTGTTATACTTAGTCTGTAGATATATTAGGGAAGTGAGCTAATTACTATCC
@@ -54,13 +50,13 @@ with typical Q scores between 0 and 40 observed, though higher are possible. The
 
 For a given file, every FASTQ sequence is processed using BioPython [@biopython] sequence utilities to extract the numerical qualities. These numerical quality scores at each position are then used to create arrays of the average quality Q score for each position (minimum and maximum are also optional), rounded to the nearest whole interger. 
 
-The calculated summary values are then used to create a representative sequence record for each file, where the Q score encodings are caluated from the summary statistics. The ASCII encoded versions of these are then extracted, and Python dictionary lookups are used to map the summary Phred score to an emoji.  The default mappings with Phred score, ASCII character and emoji are listed in following table. Binning into simplified emoji is also available to improve impact and reduce visual clutter. 
+The calculated summary values are then used to create a representative sequence record for each file, where the Q score encodings are calculated from the summary statistics. The ASCII encoded versions of these are then extracted, and Python dictionary lookups are used to map the summary Phred score to an emoji.  The default mappings with Phred score, ASCII character and emoji are listed in following table. Binning into simplified emoji is also available to improve impact and reduce visual clutter. 
 
 | Phred | Symbol | Emoji | Emoji (Binned) | Phred | Symbol | Emoji | Emoji (Binned)  | Phred | Symbol | Emoji | Emoji (Binned)  |
 |------|--------|---------|---------|------|--------|---------|---------|------|--------|---------|---------|
 | 0    | !      | 🚫       | 🚫       | 15   | 0      | 🙀       | 💩       | 30   | ?      | 😆       | 😆       |
 | 1    | "      | ❌       | 🚫       | 16   | 1      | 💣       | 💩       | 31   | @      | 😄       | 😆       |
-| 2    |        | 👺       | 💀       | 17   | 2      | 🔥       | 💩       | 32   | A      | 😋       | 😆       |
+| 2    | #      | 👺       | 💀       | 17   | 2      | 🔥       | 💩       | 32   | A      | 😋       | 😆       |
 | 3    | $      | 💔       | 💀       | 18   | 3      | 😡       | 💩       | 33   | B      | 😌       | 😆       |
 | 4    | %      | 🙅       | 💀       | 19   | 4      | 💩       | 💩       | 34   | C      | 😝       | 😆       |
 | 5    | &      | 👾       | 💀       | 20   | 5      | 🚨       | 🚨       | 35   | D      | 😛       | 😎       |
@@ -70,43 +66,13 @@ The calculated summary values are then used to create a representative sequence 
 | 9    | *      | 🙈       | 💀       | 24   | 9      | 😊       | 🚨       | 39   | H      | 😄       | 😎       |
 | 10   | +      | 🙉       | 💩       | 25   | :      | 😙       | 😄       | 40   | I      | 😎       | 😎       |
 | 11   | ,      | 🙊       | 💩       | 26   | ;      | 😗       | 😄       | 41   | J      | 😍       | 😍       |
-| 12   | -      | 🐵       | 💩       | 27   | <      | 😚       | 😄       | >41   |        | 😍         | 😍       |
+| 12   | -      | 🐵       | 💩       | 27   | <      | 😚       | 😄       | >41  |        | 😍         | 😍       |
 
 
 
 # Usage
 
-```
-usage: fastqe [-h] [--minlen N] [--scale] [--version] [--mean] [--custom CUSTOM_DICT] [--bin] [--noemoji] [--noheader] [--html] [--window W] [--html_escape] [--min] [--max]
-              [--output OUTPUT_FILE] [--long READ_LENGTH] [--log LOG_FILE]
-              [FASTQ_FILE ...]
-
-Read one or more FASTQ files, compute quality stats for each file, print as emoji... for some reason.😄
-
-positional arguments:
-  FASTQ_FILE            Input FASTQ files
-
-options:
-  -h, --help            show this help message and exit
-  --minlen N            Minimum length sequence to include in stats (default 0)
-  --scale               show relevant scale in output
-  --version             show program's version number and exit
-  --mean                show mean quality per position (DEFAULT)
-  --custom CUSTOM_DICT  use a mapping of custom emoji to quality in CUSTOM_DICT (🐍🌴)
-  --bin                 use binned scores (🚫💀💩⚠️ 😄😆😎😍)
-  --noemoji             use mapping without emoji (▁▂▃▄▅▆▇█)
-  --noheader            Hide the header before sample output
-  --html                output all data as html
-  --window W            Window length to summarise reads in HTML report (default 1)
-  --html_escape         escape html within output, e.g. for Galaxy parsing
-  --min                 show minimum quality per position
-  --max                 show maximum quality per position
-  --output OUTPUT_FILE  write output to OUTPUT_FILE instead of stdout
-  --long READ_LENGTH    enable long reads up to READ_LENGTH bp long
-  --log LOG_FILE        record program progress in LOG_FILE
-```
-
-The utility of FASTQE can easily be seen by comparing before and after quality filtering on sequencing data. For some (compressed) data in the FASTQ format [@cock_sanger_2010], FASTQE will produce by default an emoji for the mean score at each base position. This data clearly has quality issues that need investigating:
+The utility of FASTQE can easily be seen by comparing before and after quality filtering on sequencing data. For some (compressed) data in the FASTQ format , FASTQE will produce by default an emoji for the mean score at each base position. This data clearly has quality issues that need investigating.
 
 ```
 $ fastqe sample.50bp.fastq.gz
@@ -116,22 +82,25 @@ sample.50bp.fastq	mean	😀 😀 🚨 🚨 🚨 🚨 🚨 🚨 🚨 🚨 🚨 �
 After the removal of low-quality sequences, for example with `fastp` or `Trimmomatic` [@trimmomatic], the remaining files can be read in with FASTQE to see the effect:
 
 ```
-$ sample.50bp.filtered.fastq.gz
+$ fastqe sample.50bp.filtered.fastq.gz
 sample.50bp.filtered.fastq.gz        mean    😝 😌 😌 😌 😌 😌 😝 😌 😌 😋 😌 😄 😋 😌 😝 😌 😄 😄 😄 😋 😋 😄 😄 😄 😋 😋 😆 😆 😄 😄 😆 😄 😄 😄 😆 😄 😄 😆 😆 😆 😆 😄 😄 😆 😆 😆 😆 😘 😘 😡
 ```
 
-Binning is also available
+Binning is also available to use a reduced set of emoji:
 
-`--bin`
+```
+$ fastqe --bin sample.50bp.filtered.fastq.gz
+Filename        Statistic       Qualities
+sample.50bp.filtered.fastq.gz   mean (binned)   😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆
+😆 😄 😄 💩
+```
 
-
-An alternative to emoji can also be sued with the `--noemoji` option. In this mode  ASCII boxes can be used to proportionally indicate sequence quality with the height of the box proportioanl to a higher PHRED score. 
+An alternative to emoji can also be used with the `--noemoji` option. In this mode  ASCII boxes can be used to proportionally indicate sequence quality with the height of the box proportioanl to a higher PHRED score. 
 
 ```
 $ fastqe --noemoji sample.50bp.fastq.gz	
 sample.50bp.fastq.gz	mean (no-emoji)	▄▄▄▄▄▄▄▄▄▄▄▃▄▄▄▄▃▃▃▄▃▃▃▃▄▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃
 ```
-
 ```
 $ fastqe --noemoji sample.50bp.filtered.fastq.gz
 sample.50bp.filtered.fastq.gz	mean (no-emoji)	▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▃
@@ -148,10 +117,11 @@ sample.50bp.fastq	mean (custom)	🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 �
 $ fastqe --custom custom.txt  sample.50bp.filtered.fastq.gz
 sample.50bp.filtered.fastq.gz	mean (custom)	🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥈
 ```
+Other options include log files, ignoring sequences below a minimum length from the statistics, and suppressing header output. See `fastqe --help` for full details. 
 
 # Conclusion
 
-FASTQE is a software tool that serves both a practical and educational purpose. It can be adapted for many purposes. A resource on sequence quality suitable for high school and undergraduate students has also been developed [@jacques], and it has also been used in short courses and bioinformatics training [@batut]. Everyone knows that using emoji to visualise biological sequencing data is a silly idea. We have shown here that maybe it isn’t as silly as it sounds.
+FASTQE is a software tool that serves both a practical and educational purpose. It can be adapted for many purposes. A resource on sequence quality suitable for high school and undergraduate students has also been developed [@jacques], and it has also been used in short courses and bioinformatics training [@batut] in [Galaxy](https://usegalaxy.org). Future development includes an enhanced HTML output format for better integration with browser accesible tools such as Galaxy. Everyone knows that using emoji to visualise biological sequencing data is a silly idea. We have shown here that maybe it isn’t as silly as it sounds.
 
 # Acknowledgements
 
