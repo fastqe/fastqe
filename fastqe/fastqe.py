@@ -165,7 +165,7 @@ def parse_args():
     parser.add_argument('--long',
                         metavar='READ_LENGTH',
                         type=int,
-                        help='enable long reads up to READ_LENGTH bp long')
+                        help='set initial arrays to be READ_LENGTH bp for long reads')
 
     parser.add_argument('--log',
                         metavar='LOG_FILE',
