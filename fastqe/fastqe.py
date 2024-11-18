@@ -141,16 +141,16 @@ def parse_args():
         help='Hide the header before sample output')
     parser.add_argument('--html',
                         action='store_true',
-                        help='output all data as html')
+                        help='output all data as html [Experimental]')
     parser.add_argument(
         '--window',
         metavar='W',
         type=int,
         default=1,
-        help='Window length to summarise reads in HTML report (default 1)')
+        help='Window length to summarise reads in HTML report (default 1) [Experimental]')
     parser.add_argument('--html_escape',
                         action='store_true',
-                        help='escape html within output, e.g. for Galaxy parsing')
+                        help='escape html within output, e.g. for Galaxy parsing [Experimental]')
     parser.add_argument('--min',
                         action='store_true',
                         help='show minimum quality per position')
