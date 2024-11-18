@@ -76,6 +76,36 @@ The calculated summary values are then used to create a representative sequence 
 
 # Usage
 
+```
+usage: fastqe [-h] [--minlen N] [--scale] [--version] [--mean] [--custom CUSTOM_DICT] [--bin] [--noemoji] [--noheader] [--html] [--window W] [--html_escape] [--min] [--max]
+              [--output OUTPUT_FILE] [--long READ_LENGTH] [--log LOG_FILE]
+              [FASTQ_FILE ...]
+
+Read one or more FASTQ files, compute quality stats for each file, print as emoji... for some reason.😄
+
+positional arguments:
+  FASTQ_FILE            Input FASTQ files
+
+options:
+  -h, --help            show this help message and exit
+  --minlen N            Minimum length sequence to include in stats (default 0)
+  --scale               show relevant scale in output
+  --version             show program's version number and exit
+  --mean                show mean quality per position (DEFAULT)
+  --custom CUSTOM_DICT  use a mapping of custom emoji to quality in CUSTOM_DICT (🐍🌴)
+  --bin                 use binned scores (🚫💀💩⚠️ 😄😆😎😍)
+  --noemoji             use mapping without emoji (▁▂▃▄▅▆▇█)
+  --noheader            Hide the header before sample output
+  --html                output all data as html
+  --window W            Window length to summarise reads in HTML report (default 1)
+  --html_escape         escape html within output, e.g. for Galaxy parsing
+  --min                 show minimum quality per position
+  --max                 show maximum quality per position
+  --output OUTPUT_FILE  write output to OUTPUT_FILE instead of stdout
+  --long READ_LENGTH    enable long reads up to READ_LENGTH bp long
+  --log LOG_FILE        record program progress in LOG_FILE
+```
+
 The utility of FASTQE can easily be seen by comparing before and after quality filtering on sequencing data. For some (compressed) data in the FASTQ format [@cock_sanger_2010], FASTQE will produce by default an emoji for the mean score at each base position. This data clearly has quality issues that need investigating:
 
 ```
