@@ -64,74 +64,26 @@ The utility of FASTQE can easily be seen by comparing before and after quality f
 
 ![FASTQE output on a sample file](fig2.png)
 
-```
-$ fastqe sample.50bp.fastq.gz
-Filename	Statistic	Qualities
-sample.50bp.fastq	mean	😀 😀 🚨 🚨 🚨 🚨 🚨 🚨 🚨 🚨 🚨 💩 🚨 🚨 🚨 🚨 💩 💩 💩 🚨 💩 💩 💩 💩 🚨 💩 😡 💩 💩 💩 💩 💩 😡 💩 💩 💩 💩 💩 😡 😡 💩 😡 😡 😡 😡 😡 😡 😡 😡 😿
-```
-
 After the removal of low-quality sequences, for example with `fastp` or `Trimmomatic` [@Bolger2014-om], the remaining files can be read in with FASTQE to see the effect:
 
 ![FASTQE output on a sample file that has been filtered to remove low quality sequences](fig3.png)
 
-```
-$ fastqe sample.50bp.filtered.fastq.gz
-Filename	Statistic	Qualities
-sample.50bp.filtered.fastq.gz        mean    😝 😌 😌 😌 😌 😌 😝 😌 😌 😋 😌 😄 😋 😌 😝 😌 😄 😄 😄 😋 😋 😄 😄 😄 😋 😋 😆 😆 😄 😄 😆 😄 😄 😄 😆 😄 😄 😆 😆 😆 😆 😄 😄 😆 😆 😆 😆 😘 😘 😡
-```
-
 The maximum and minmum quality scores per position can also be displayed in addition to the mean:
 
-![FASTQE output with minimum and maximum read qualities enabled](fig4.png)
-
-```
-$ fastqe --min --max sample.50bp.filtered.fastq.gz
-Filename	Statistic	Qualities
-sample.50bp.filtered.fastq.gz	max	😁 😁 😁 😁 😁 😁 😁 😁 😁 😁 😁 😁 😁 😁 😁 😁 😁 😉 😉 😁 😁 😁 😁 😉 😁 😉 😉 😁 😉 😁 😉 😁 😉 😁 😉 😉 😉 😁 😉 😉 😉 😉 😉 😉 😉 😉 😉 😉 😉 😉
-sample.50bp.filtered.fastq.gz	mean	😝 😌 😌 😌 😌 😌 😝 😌 😌 😋 😌 😄 😋 😌 😝 😌 😄 😄 😄 😋 😋 😄 😄 😄 😋 😋 😆 😆 😄 😄 😆 😄 😄 😄 😆 😄 😄 😆 😆 😆 😆 😄 😄 😆 😆 😆 😆 😘 😘 😡
-sample.50bp.filtered.fastq.gz	min	🙈 👻 💀 💀 👻 💀 👻 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 👻 👻 👻 👻 👻 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀 💀
-```
+![FASTQE output with minimum and maximum read qualities enabled](fig3a.png)
 
 Binning is also available to use a reduced set of emoji:
 
 ![FASTQE output with binning of read qualities enabled](fig5.png)
 
-```
-$ fastqe --bin sample.50bp.filtered.fastq.gz
-Filename        Statistic       Qualities
-sample.50bp.filtered.fastq.gz   mean (binned)   😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😆 😄 😄 💩
-```
-
 An alternative to emoji can also be used with the `--noemoji` option. In this mode  ASCII boxes can be used to proportionally indicate sequence quality with the height of the box proportional to a higher PHRED score. 
 
 ![FASTQE output with the --noemoji option enabled](fig6.png)
-
-```
-$ fastqe --noemoji sample.50bp.fastq.gz
-Filename	Statistic	Qualities
-sample.50bp.fastq.gz	mean (no-emoji)	▄▄▄▄▄▄▄▄▄▄▄▃▄▄▄▄▃▃▃▄▃▃▃▃▄▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃
-```
-```
-$ fastqe --noemoji sample.50bp.filtered.fastq.gz
-Filename	Statistic	Qualities
-sample.50bp.filtered.fastq.gz	mean (no-emoji)	▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▃
-```
 
 Users can provide a custom mapping of custom emoji to quality in a text file. FASTQE is designed with `pyemojify` to use emoji aliases, e.g. `:crying_cat_face:`, however direct use of emoji in the dictionary is also supported. Revisiting the sample data before and after quality filtering demonstrates the visual narratives possible with custom emoji, such as in this case, turning silver into gold.
 
 ![FASTQE output with the custom emoji mappings](fig7.png)
 
-```
-$ fastqe --custom custom.txt  sample.50bp.fastq.gz
-Filename	Statistic	Qualities
-sample.50bp.fastq	mean (custom)	🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥈 🥇 🥇 🥇 🥇 🥈 🥈 🥈 🥇 🥈 🥈 🥈 🥈 🥇 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈 🥈
-```
-
-```
-$ fastqe --custom custom.txt  sample.50bp.filtered.fastq.gz
-Filename	Statistic	Qualities
-sample.50bp.filtered.fastq.gz	mean (custom)	🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥇 🥈
-```
 Other options include log files, ignoring sequences below a minimum length from the statistics, and suppressing header output. See `fastqe --help` for full details. 
 
 # Conclusion
