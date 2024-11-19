@@ -52,7 +52,7 @@ Q = -10 * log10(P)
 
 with typical Q scores between 0 and 40 observed, though higher are possible. The higher the Q score, the higher the probability of a correct base call. 
 
-For a given file, every FASTQ sequence is processed using BioPython [@biopython] sequence utilities to extract the numerical qualities. These numerical quality scores at each position are then used to create arrays of the average quality Q score for each position (minimum and maximum are also optional), rounded to the nearest whole integer. To account for recent long-read technologies with variable read lengths, the arrays are dynamically expanded to ensure memory is used efficiently. 
+For a given file, every FASTQ sequence is processed using BioPython [@cock_biopython_2009] sequence utilities to extract the numerical qualities. These numerical quality scores at each position are then used to create arrays of the average quality Q score for each position (minimum and maximum are also optional), rounded to the nearest whole integer. To account for recent long-read technologies with variable read lengths, the arrays are dynamically expanded to ensure memory is used efficiently. 
 
 The calculated summary values are then used to create a representative sequence record for each file, where the Q score encodings are calculated from the summary statistics. The ASCII encoded versions of these are then extracted, and Python dictionary lookups are used to map the summary Phred score to an emoji.  The default mappings with Phred score, ASCII character and emoji are listed in the following table. Binning into simplified emoji is also available to improve impact and reduce visual clutter. 
 
@@ -83,7 +83,7 @@ Filename	Statistic	Qualities
 sample.50bp.fastq	mean	😀 😀 🚨 🚨 🚨 🚨 🚨 🚨 🚨 🚨 🚨 💩 🚨 🚨 🚨 🚨 💩 💩 💩 🚨 💩 💩 💩 💩 🚨 💩 😡 💩 💩 💩 💩 💩 😡 💩 💩 💩 💩 💩 😡 😡 💩 😡 😡 😡 😡 😡 😡 😡 😡 😿
 ```
 
-After the removal of low-quality sequences, for example with `fastp` or `Trimmomatic` [@trimmomatic], the remaining files can be read in with FASTQE to see the effect:
+After the removal of low-quality sequences, for example with `fastp` or `Trimmomatic` [@Bolger2014-om], the remaining files can be read in with FASTQE to see the effect:
 
 ```
 $ fastqe sample.50bp.filtered.fastq.gz
@@ -139,7 +139,7 @@ Other options include log files, ignoring sequences below a minimum length from 
 
 # Conclusion
 
-FASTQE is a software tool that serves both a practical and educational purpose. It can be adapted for many purposes. A resource on sequence quality suitable for high school and undergraduate students has also been developed [@jacques], and it has also been used in short courses and bioinformatics training [@batut] in [Galaxy](https://usegalaxy.org). Future development includes an enhanced HTML output format for better integration with browser accessible tools such as Galaxy. Everyone knows that using emoji to visualise biological sequencing data is a silly idea. We have shown here that maybe it isn’t as silly as it sounds.
+FASTQE is a software tool that serves both a practical and educational purpose. It can be adapted for many purposes. A resource on sequence quality suitable for high school and undergraduate students has also been developed [@jacques], and it has also been used in short courses and bioinformatics training [@sequence-analysis-quality-control] in [Galaxy](https://usegalaxy.org). Future development includes an enhanced HTML output format for better integration with browser accessible tools such as Galaxy. Everyone knows that using emoji to visualise biological sequencing data is a silly idea. We have shown here that maybe it isn’t as silly as it sounds.
 
 # Acknowledgements
 
