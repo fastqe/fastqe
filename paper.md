@@ -56,28 +56,13 @@ For a given file, every FASTQ sequence is processed using BioPython [@cock_biopy
 
 The calculated summary values are then used to create a representative sequence record for each file, where the Q score encodings are calculated from the summary statistics. The ASCII encoded versions of these are then extracted, and Python dictionary lookups are used to map the summary Phred score to an emoji.  The default mappings with Phred score, ASCII character and emoji are shown in \autoref{fig:example}. Binning into simplified emoji is also available to improve impact and reduce visual clutter. 
 
-| Phred | Symbol | Emoji | Emoji (Binned) | Phred | Symbol | Emoji | Emoji (Binned)  | Phred | Symbol | Emoji | Emoji (Binned)  |
-|------|--------|---------|---------|------|--------|---------|---------|------|--------|---------|---------|
-| 0    | !      | 🚫       | 🚫       | 15   | 0      | 🙀       | 💩       | 30   | ?      | 😆       | 😆       |
-| 1    | "      | ❌       | 🚫       | 16   | 1      | 💣       | 💩       | 31   | @      | 😄       | 😆       |
-| 2    | #      | 👺       | 💀       | 17   | 2      | 🔥       | 💩       | 32   | A      | 😋       | 😆       |
-| 3    | $      | 💔       | 💀       | 18   | 3      | 😡       | 💩       | 33   | B      | 😌       | 😆       |
-| 4    | %      | 🙅       | 💀       | 19   | 4      | 💩       | 💩       | 34   | C      | 😝       | 😆       |
-| 5    | &      | 👾       | 💀       | 20   | 5      | 🚨       | 🚨       | 35   | D      | 😛       | 😎       |
-| 6    | '      | 👿       | 💀       | 21   | 6      | 😀       | 🚨       | 36   | E      | 😜       | 😎       |
-| 7    | (      | 💀       | 💀       | 22   | 7      | 😅       | 🚨       | 37   | F      | 😉       | 😎       |
-| 8    | )      | 👻       | 💀       | 23   | 8      | 😏       | 🚨       | 38   | G      | 😁       | 😎       |
-| 9    | *      | 🙈       | 💀       | 24   | 9      | 😊       | 🚨       | 39   | H      | 😄       | 😎       |
-| 10   | +      | 🙉       | 💩       | 25   | :      | 😙       | 😄       | 40   | I      | 😎       | 😎       |
-| 11   | ,      | 🙊       | 💩       | 26   | ;      | 😗       | 😄       | 41   | J      | 😍       | 😍       |
-| 12   | -      | 🐵       | 💩       | 27   | <      | 😚       | 😄       | >41  |        | 😍         | 😍       |
-
-
 ![The default mapping from Phred Q scores to emoji available in FASTQE.\label{fig:example}](mapping.png)
 
 # Usage
 
 The utility of FASTQE can easily be seen by comparing before and after quality filtering on sequencing data. For some (compressed) data in the FASTQ format , FASTQE will produce by default an emoji for the mean score at each base position. This data clearly has quality issues that need investigating.
+
+![FASTQE output on a sample file](fig2.png)
 
 ```
 $ fastqe sample.50bp.fastq.gz
@@ -87,6 +72,8 @@ sample.50bp.fastq	mean	😀 😀 🚨 🚨 🚨 🚨 🚨 🚨 🚨 🚨 🚨 �
 
 After the removal of low-quality sequences, for example with `fastp` or `Trimmomatic` [@Bolger2014-om], the remaining files can be read in with FASTQE to see the effect:
 
+![FASTQE output on a sample file that has been filtered to remove low quality sequences](fig3.png)
+
 ```
 $ fastqe sample.50bp.filtered.fastq.gz
 Filename	Statistic	Qualities
@@ -94,6 +81,8 @@ sample.50bp.filtered.fastq.gz        mean    😝 😌 😌 😌 😌 😌 😝 
 ```
 
 The maximum and minmum quality scores per position can also be displayed in addition to the mean:
+
+![FASTQE output with minimum and maximum read qualities enabled](fig4.png)
 
 ```
 $ fastqe --min --max sample.50bp.filtered.fastq.gz
@@ -105,6 +94,8 @@ sample.50bp.filtered.fastq.gz	min	🙈 👻 💀 💀 👻 💀 👻 💀 💀 �
 
 Binning is also available to use a reduced set of emoji:
 
+![FASTQE output with binning of read qualities enabled](fig5.png)
+
 ```
 $ fastqe --bin sample.50bp.filtered.fastq.gz
 Filename        Statistic       Qualities
@@ -112,6 +103,8 @@ sample.50bp.filtered.fastq.gz   mean (binned)   😆 😆 😆 😆 😆 😆 �
 ```
 
 An alternative to emoji can also be used with the `--noemoji` option. In this mode  ASCII boxes can be used to proportionally indicate sequence quality with the height of the box proportional to a higher PHRED score. 
+
+![FASTQE output with the --noemoji option enabled](fig6.png)
 
 ```
 $ fastqe --noemoji sample.50bp.fastq.gz
@@ -125,6 +118,8 @@ sample.50bp.filtered.fastq.gz	mean (no-emoji)	▆▆▆▆▆▆▆▆▆▆▆�
 ```
 
 Users can provide a custom mapping of custom emoji to quality in a text file. FASTQE is designed with `pyemojify` to use emoji aliases, e.g. `:crying_cat_face:`, however direct use of emoji in the dictionary is also supported. Revisiting the sample data before and after quality filtering demonstrates the visual narratives possible with custom emoji, such as in this case, turning silver into gold.
+
+![FASTQE output with the custom emoji mappings](fig7.png)
 
 ```
 $ fastqe --custom custom.txt  sample.50bp.fastq.gz
