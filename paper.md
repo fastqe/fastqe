@@ -54,7 +54,7 @@ with typical Q scores between 0 and 40 observed, though higher are possible. The
 
 For a given file, every FASTQ sequence is processed using BioPython [@cock_biopython_2009] sequence utilities to extract the numerical qualities. These numerical quality scores at each position are then used to create arrays of the average quality Q score for each position (minimum and maximum are also optional), rounded to the nearest whole integer. To account for recent long-read technologies with variable read lengths, the arrays are dynamically expanded to ensure memory is used efficiently. 
 
-The calculated summary values are then used to create a representative sequence record for each file, where the Q score encodings are calculated from the summary statistics. The ASCII encoded versions of these are then extracted, and Python dictionary lookups are used to map the summary Phred score to an emoji.  The default mappings with Phred score, ASCII character and emoji are listed in the following table. Binning into simplified emoji is also available to improve impact and reduce visual clutter. 
+The calculated summary values are then used to create a representative sequence record for each file, where the Q score encodings are calculated from the summary statistics. The ASCII encoded versions of these are then extracted, and Python dictionary lookups are used to map the summary Phred score to an emoji.  The default mappings with Phred score, ASCII character and emoji are shown in \autoref{fig:example}. Binning into simplified emoji is also available to improve impact and reduce visual clutter. 
 
 | Phred | Symbol | Emoji | Emoji (Binned) | Phred | Symbol | Emoji | Emoji (Binned)  | Phred | Symbol | Emoji | Emoji (Binned)  |
 |------|--------|---------|---------|------|--------|---------|---------|------|--------|---------|---------|
@@ -72,6 +72,8 @@ The calculated summary values are then used to create a representative sequence 
 | 11   | ,      | 🙊       | 💩       | 26   | ;      | 😗       | 😄       | 41   | J      | 😍       | 😍       |
 | 12   | -      | 🐵       | 💩       | 27   | <      | 😚       | 😄       | >41  |        | 😍         | 😍       |
 
+
+![The default mapping from Phred Q scores to emoji available in FASTQE.\label{fig:example}](mapping.png)
 
 # Usage
 
