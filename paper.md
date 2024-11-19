@@ -23,11 +23,11 @@ bibliography: paper.bib
 
 # Summary
 
-Bioinformatics is the science 🧑🏻‍🔬 of understanding and analysing biological information 💡, such as the genetic information contained in DNA 🧬. Modern scientific equipment can measure biological sequences with high accuracy 🎯, yet no technology is flawless and called nucleotide bases can be wrong ❌. Data quality issues need to be assessed and addressed to ensure confidence in downstream interpretation 📝 in medicine and science. 
+Bioinformatics is the science of understanding and analysing biological information , such as the genetic information contained in DNA. Modern scientific equipment can measure biological sequences with high accuracy, yet no technology is flawless and called nucleotide bases can be wrong. Data quality issues need to be assessed and addressed to ensure confidence in downstream interpretation in medicine and science. 
 
-FASTQE 🤔 is a utility for viewing the quality of biological sequence data by using emoji 😂. It summarises the average quality score for each position in a set of biological sequence measurements, and transcribes that average quality into a corresponding emoji to see the good 😍, the bad 💩,and the ugly 💀 of sequencing data.  When invoked from the command line it can also display the minimum 📉 and maximum 📈 quality scores per position, and bin quality 🗑️ scores into a reduced set of emoji. Custom emoji can also be used 🐍 🌵 👍. 
+FASTQE is a utility for viewing the quality of biological sequence data by using emoji. It summarises the average quality score for each position in a set of biological sequence measurements, and transcribes that average quality into a corresponding emoji to see the good, the bad,and the ugly of sequencing data. When invoked from the command line it can also display the minimum and maximum quality scores per position, and bin quality scores into a reduced set of emoji. Custom emoji can also be used. 
 
-FASTQE can be used to rapidly 🏃 assess the quality of sequence data. It also helps transform complex 🤯 bioinformatics data into engaging, emoji-based visualisations 📊, making bioinformatics concepts more accessible 😌 and adding an element of fun 🤪 to scientific education 📚 and communication 🗣️.
+FASTQE can be used to rapidly assess the quality of sequence data. It also helps transform complex bioinformatics data into engaging, emoji-based visualisations, making bioinformatics concepts more accessible and adding an element of fun to scientific education and communication.
 
 # Statement of need
 
@@ -36,6 +36,8 @@ Assessing the quality of high-throughput sequencing data is critical for ensurin
 FASTQE has the same goal of expressing sequence quality, but fills a need in accessibility and simplicity. As a command-line-first tool, it is designed to be run alongside other bioinformatics tools in environments such as high performance computing clusters. It gives insight into sequence quality in an informal manner. Its feature set is similar to but not as detailed as FASTQC, and focuses on core concepts of sequence quality analysis with an engaging visualization format.
 
 The interpretability of emoji in education and outreach is also important, especially when considering non-English speakers, and FASTQE improves the accessibility and diversity of the audience that biomedical researchers can communicate to. FASTQE is a Python package that can be used in programming exercises, as well as a command line tool. It can be installed both via PyPI and Bioconda. FASTQE offers a fun gateway into the use of the command line, which may also benefit users used to graphical interfaces.
+
+In reserach, FASTQE can serve as an initial quality checking tool for sequence data, and critically, can be done so on the command line without the additional steps needed for the HTML outputs of alternatives. 
 
 # Design
 
