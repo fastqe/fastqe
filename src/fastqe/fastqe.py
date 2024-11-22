@@ -8,7 +8,6 @@ import logging
 import sys
 
 from Bio import SeqIO
-from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqIO import QualityIO
 from Bio.SeqRecord import SeqRecord
@@ -949,8 +948,7 @@ def main():
     if not options.noheader:
         if options.output:
             print(HEADER, file=options.output)
-        else:
-            print(HEADER)
+
     process_files(options)
 
 
