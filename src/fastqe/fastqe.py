@@ -16,6 +16,7 @@ from pyemojify import emojify
 import numpy as np
 
 from fastqe._version import __version__
+from fastqe.utils.logs import init_logging
 import fastqe.fastqe_map as emaps  # todo make maps illumin 1.9 specific etc
 
 # #PyCharm testing command line processing
@@ -83,118 +84,6 @@ def exit_with_error(message, exit_status):
     sys.exit(exit_status)
 
 
-def parse_args():
-    """Parse command line arguments.
-    Returns Options object with command line argument values as attributes.
-    Will exit the program on a command line error.
-    """
-    parser = ArgumentParser(
-        description="Read one or more FASTQ files, compute quality stats for each file, print as emoji... for some reason."
-        + emojify(":smile:"),
-        prog="fastqe",
-    )
-    parser.add_argument(
-        "-v",
-        "--version",
-        action="version",
-        version="%(prog)s {version}".format(version=__version__),
-    )
-    parser.add_argument(
-        "--minlen",
-        metavar="N",
-        type=int,
-        default=DEFAULT_MIN_LEN,
-        help="Minimum length sequence to include in stats (default {})".format(
-            DEFAULT_MIN_LEN
-        ),
-    )
-    parser.add_argument(
-        "--scale", action="store_true", help="show relevant scale in output"
-    )
-    parser.add_argument(
-        "--mean",
-        default=True,
-        action="store_true",
-        help="show mean quality per position (DEFAULT)",
-    )
-    parser.add_argument(
-        "--custom",
-        metavar="CUSTOM_DICT",
-        type=str,
-        help="use a mapping of custom emoji to quality in CUSTOM_DICT ("
-        + emojify(":snake:")
-        + emojify(":palm_tree:")
-        + ")",
-    )
-    parser.add_argument(
-        "--bin",
-        action="store_true",
-        help="use binned scores ("
-        + emojify(":no_entry_sign:")
-        + emojify(":skull:")
-        + emojify(":poop:")
-        + emojify(":warning:")
-        + " "
-        + emojify(":smile:")
-        + emojify(":laughing:")
-        + emojify(":sunglasses:")
-        + emojify(":heart_eyes:")
-        + ")",
-    )
-    parser.add_argument(
-        "--noemoji", action="store_true", help="use mapping without emoji (▁▂▃▄▅▆▇█)"
-    )
-    parser.add_argument(
-        "--noheader", action="store_true", help="Hide the header before sample output"
-    )
-    parser.add_argument(
-        "--html", action="store_true", help="output all data as html [Experimental]"
-    )
-    parser.add_argument(
-        "--window",
-        metavar="W",
-        type=int,
-        default=1,
-        help="Window length to summarise reads in HTML report (default 1) [Experimental]",
-    )
-    parser.add_argument(
-        "--html_escape",
-        action="store_true",
-        help="escape html within output, e.g. for Galaxy parsing [Experimental]",
-    )
-    parser.add_argument(
-        "--min", action="store_true", help="show minimum quality per position"
-    )
-    parser.add_argument(
-        "--max", action="store_true", help="show maximum quality per position"
-    )
-    parser.add_argument(
-        "--output",
-        metavar="OUTPUT_FILE",
-        type=FileType("w"),
-        help="write output to OUTPUT_FILE instead of stdout",
-    )
-    parser.add_argument(
-        "--long",
-        metavar="READ_LENGTH",
-        type=int,
-        help="set initial arrays to be READ_LENGTH bp for long reads",
-    )
-
-    parser.add_argument(
-        "--log",
-        metavar="LOG_FILE",
-        type=str,
-        help="record program progress in LOG_FILE",
-    )
-    parser.add_argument(
-        "fastq_files",
-        nargs="*",
-        metavar="FASTQ_FILE",
-        type=str,
-        help="Input FASTQ files",
-    )
-    return parser.parse_args()
 
 
 class FastqStats(object):
@@ -885,28 +774,7 @@ def map_scores(
     return mapped_values
 
 
-def init_logging(log_filename):
-    """If the log_filename is defined, then
-    initialise the logging facility, and write log statement
-    indicating the program has started, and also write out the
-    command line from sys.argv
 
-    Arguments:
-        log_filename: either None, if logging is not required, or the
-            string name of the log file to write to
-    Result:
-        None
-    """
-    if log_filename is not None:
-        logging.basicConfig(
-            filename=log_filename,
-            level=logging.DEBUG,
-            filemode="w",
-            format="%(asctime)s %(levelname)s - %(message)s",
-            datefmt="%m-%d-%Y %H:%M:%S",
-        )
-        logging.info("program started")
-        logging.info("command line: {0}".format(" ".join(sys.argv)))
 
 
 def run_fastqe(
@@ -922,6 +790,7 @@ def run_fastqe(
     output=None,
     long=None,
     log=None,
+    loglevel="DEBUG",
     bin=False,
     html=False,
     html_escape=False,
@@ -933,6 +802,7 @@ def run_fastqe(
         bin=bin,
         custom=custom,
         log=log,
+        loglevel=loglevel,
         long=long,
         max=max,
         mean=mean,
@@ -952,11 +822,133 @@ def run_fastqe(
         return
     process_files(options)
 
+def parse_args():
+    """Parse command line arguments.
+    Returns Options object with command line argument values as attributes.
+    Will exit the program on a command line error.
+    """
+    parser = ArgumentParser(
+        description="Read one or more FASTQ files, compute quality stats for each file, print as emoji... for some reason."
+        + emojify(":smile:"),
+        prog="fastqe",
+    )
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version="%(prog)s {version}".format(version=__version__),
+    )
+    parser.add_argument(
+        "--loglevel",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Set logging level. Default: 'DEBUG'",
+    )
+    parser.add_argument(
+        "--minlen",
+        metavar="N",
+        type=int,
+        default=DEFAULT_MIN_LEN,
+        help="Minimum length sequence to include in stats (default {})".format(
+            DEFAULT_MIN_LEN
+        ),
+    )
+    parser.add_argument(
+        "--scale", action="store_true", help="show relevant scale in output"
+    )
+    parser.add_argument(
+        "--mean",
+        default=True,
+        action="store_true",
+        help="show mean quality per position (DEFAULT)",
+    )
+    parser.add_argument(
+        "--custom",
+        metavar="CUSTOM_DICT",
+        type=str,
+        help="use a mapping of custom emoji to quality in CUSTOM_DICT ("
+        + emojify(":snake:")
+        + emojify(":palm_tree:")
+        + ")",
+    )
+    parser.add_argument(
+        "--bin",
+        action="store_true",
+        help="use binned scores ("
+        + emojify(":no_entry_sign:")
+        + emojify(":skull:")
+        + emojify(":poop:")
+        + emojify(":warning:")
+        + " "
+        + emojify(":smile:")
+        + emojify(":laughing:")
+        + emojify(":sunglasses:")
+        + emojify(":heart_eyes:")
+        + ")",
+    )
+    parser.add_argument(
+        "--noemoji", action="store_true", help="use mapping without emoji (▁▂▃▄▅▆▇█)"
+    )
+    parser.add_argument(
+        "--noheader", action="store_true", help="Hide the header before sample output"
+    )
+    parser.add_argument(
+        "--html", action="store_true", help="output all data as html [Experimental]"
+    )
+    parser.add_argument(
+        "--window",
+        metavar="W",
+        type=int,
+        default=1,
+        help="Window length to summarise reads in HTML report (default 1) [Experimental]",
+    )
+    parser.add_argument(
+        "--html_escape",
+        action="store_true",
+        help="escape html within output, e.g. for Galaxy parsing [Experimental]",
+    )
+    parser.add_argument(
+        "--min", action="store_true", help="show minimum quality per position"
+    )
+    parser.add_argument(
+        "--max", action="store_true", help="show maximum quality per position"
+    )
+    parser.add_argument(
+        "--output",
+        metavar="OUTPUT_FILE",
+        type=FileType("w"),
+        help="write output to OUTPUT_FILE instead of stdout",
+    )
+    parser.add_argument(
+        "--long",
+        metavar="READ_LENGTH",
+        type=int,
+        help="set initial arrays to be READ_LENGTH bp for long reads",
+    )
+
+    parser.add_argument(
+        "--log",
+        metavar="LOG_FILE",
+        type=str,
+        help="record program progress in LOG_FILE",
+    )
+    parser.add_argument(
+        "fastq_files",
+        nargs="*",
+        metavar="FASTQ_FILE",
+        type=str,
+        help="Input FASTQ files",
+    )
+    return parser.parse_args()
 
 def main():
     "Orchestrate the execution of the program"
     options = parse_args()
-    init_logging(options.log)
+    # Set up logging
+    init_logging(loglevel=options.loglevel, logfile=options.log)
+    
+    logging.info("cmd: {0}".format(" ".join(sys.argv)))
+    
     if not options.noheader:
         if options.output:
             print(HEADER, file=options.output)
