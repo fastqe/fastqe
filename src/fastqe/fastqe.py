@@ -84,8 +84,6 @@ def exit_with_error(message, exit_status):
     sys.exit(exit_status)
 
 
-
-
 class FastqStats(object):
     """Compute various statistics for a FASTQ file:
 
@@ -774,9 +772,6 @@ def map_scores(
     return mapped_values
 
 
-
-
-
 def run_fastqe(
     fastq_files,
     minlen=0,
@@ -821,6 +816,7 @@ def run_fastqe(
         print(PROGRAM_NAME, PROGRAM_VERSION)
         return
     process_files(options)
+
 
 def parse_args():
     """Parse command line arguments.
@@ -941,14 +937,15 @@ def parse_args():
     )
     return parser.parse_args()
 
+
 def main():
     "Orchestrate the execution of the program"
     options = parse_args()
     # Set up logging
     init_logging(loglevel=options.loglevel, logfile=options.log)
-    
+
     logging.info("cmd: {0}".format(" ".join(sys.argv)))
-    
+
     if not options.noheader:
         if options.output:
             print(HEADER, file=options.output)
