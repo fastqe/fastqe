@@ -12,6 +12,8 @@ description = "A emoji based bioinformatics command line tool."
 authors = [
     { name="Andrew Lonsdale", email="andrew.lonsdale@lonsbio.com.au" }
 ]
+# Minimum required Python version.
+requires-python = ">=3.8"
 # The readme file for the project.
 readme = "README.md"
 # Keywords for the project.
@@ -28,6 +30,8 @@ homepage = "https://github.com/fastqe/fastqe"
 documentation = "https://github.com/fastqe/fastqe"
 repository = "https://github.com/fastqe/fastqe"
 
+[project.scripts]
+teloclip = "fastqe.fastqe:main"
 
 # Hatch build configuration
 [tool.hatch.build]
