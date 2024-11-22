@@ -8,7 +8,7 @@ seq_emoji_map = {
     'N': ':question:'
 }
 
-all_qualities = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+all_qualities = r"!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
 #From https://en.wikipedia.org/wiki/FASTQ_format
 # note order not exact here
