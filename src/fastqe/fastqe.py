@@ -17,8 +17,6 @@ import ast
 import binascii
 import gzip
 import logging
-import os
-import pkg_resources
 import sys
 
 from Bio import SeqIO
