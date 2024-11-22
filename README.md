@@ -20,7 +20,7 @@ Latest release versions of `fastqe` are available via `pip` or BioConda:
 
 ## Development
 
-Development version can be isntall from this repository in the `master` branch. 
+Development version can be installed from this repository in the `master` branch. 
 
 
 # Usage
