@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 '''
 Module      : Main
 Description : The main entry point for the program.
@@ -15,22 +13,24 @@ variety of statistics, and then prints a summary of the statistics as output....
 from __future__ import print_function
 from argparse import ArgumentParser, FileType, Namespace
 from math import floor
-import sys
-from Bio import SeqIO
-import logging
-import pkg_resources
-from pyemojify import emojify
-import numpy as np
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO import QualityIO
-from . import fastqe_map as emaps # todo make maps illumin 1.9 specific etc
-import os
-import gzip
 import ast
 import binascii
+import gzip
+import logging
+import os
+import pkg_resources
+import sys
 
+from Bio import SeqIO
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqIO import QualityIO
+from Bio.SeqRecord import SeqRecord
+from pyemojify import emojify
+import numpy as np
+
+from fastqe._version import __version__
+import fastqe.fastqe_map as emaps # todo make maps illumin 1.9 specific etc
 
 # #PyCharm testing command line processing
 # sys.argv = [
@@ -65,6 +65,7 @@ HEADER = 'Filename\tStatistic\tQualities'
 #HEADER = '# FASTQE sequence quality for:'
 DEFAULT_READ_LENGTH = 500
 PROGRAM_NAME = "fastqe"
+PROGRAM_VERSION = __version__
 
 CASE_NEITHER = 0
 CASE_MIN = 1
@@ -79,13 +80,6 @@ def print_scale(full_quals,mapping_dict,binned):
     for i in full_quals:
         print("# ",count,i,emojify(mapping_dict.get(i,':heart_eyes:')))
         count = count +1
-
-
-
-try:
-    PROGRAM_VERSION = pkg_resources.require(PROGRAM_NAME)[0].version
-except pkg_resources.DistributionNotFound:
-    PROGRAM_VERSION = "undefined_version"
 
 
 def exit_with_error(message, exit_status):
@@ -107,7 +101,16 @@ def parse_args():
     Returns Options object with command line argument values as attributes.
     Will exit the program on a command line error.
     '''
-    parser = ArgumentParser(description='Read one or more FASTQ files, compute quality stats for each file, print as emoji... for some reason.'+emojify(":smile:"))
+    parser = ArgumentParser(
+        description='Read one or more FASTQ files, compute quality stats for each file, print as emoji... for some reason.'+emojify(":smile:"),
+        prog="fastqe",
+        )
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version="%(prog)s {version}".format(version=__version__),
+    )
     parser.add_argument(
         '--minlen',
         metavar='N',
@@ -118,9 +121,6 @@ def parse_args():
     parser.add_argument('--scale',
                         action='store_true',
                         help='show relevant scale in output')
-    parser.add_argument('--version',
-        action='version',
-        version='%(prog)s ' + PROGRAM_VERSION)
     parser.add_argument('--mean',
         default=True,
         action='store_true',
@@ -740,10 +740,6 @@ def map_scores(sequence,
     # print(sequence)
     mapped_values = spacer.join([mapping_function(mapping_dict.get(s, default_value)) for s in QualityIO._get_sanger_quality_str(sequence)])
     return(mapped_values)
-
-
-
-
 
 
 def init_logging(log_filename):
