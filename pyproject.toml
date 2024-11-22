@@ -1,0 +1,56 @@
+# Build system configuration
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+# The name of the project.
+name = "fastqe"
+# A short description of the project.
+description = "A emoji based bioinformatics command line tool."
+# The authors of the project.
+authors = [
+    { name="Andrew Lonsdale", email="andrew.lonsdale@lonsbio.com.au" }
+]
+# The readme file for the project.
+readme = "README.md"
+# Keywords for the project.
+keywords = ["emoji", "bioinformatics", "next-generation sequencing"]
+# The license for the project.
+license = { file = "LICENSE.txt" }
+
+# Dynamic versioning
+dynamic = ["version"]
+
+# Project URLs
+[project.urls]
+homepage = "https://github.com/fastqe/fastqe"
+documentation = "https://github.com/fastqe/fastqe"
+repository = "https://github.com/fastqe/fastqe"
+
+
+# Hatch build configuration
+[tool.hatch.build]
+source = "src"
+
+# Exclude files and directories from the build
+exclude = [
+    "environment.yml",
+]
+
+# Hatch versioning configuration
+[tool.hatch.version]
+source = "vcs"
+
+# Version control system (VCS) versioning
+[tool.hatch.version.vcs]
+tag-pattern = "v*"  # Git tags starting with 'v' will be used for versioning
+fallback-version = "0.0.0"
+
+# Version file location for VCS
+[tool.hatch.build.hooks.vcs]
+version-file = "src/fastqe/_version.py"
+
+# Optional dependencies for testing
+[project.optional-dependencies]
+tests = ["pytest", "hatch"]
