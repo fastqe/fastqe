@@ -1,0 +1,14 @@
+name: fastqe-dev
+channels:
+  - conda-forge
+dependencies:
+  # Development Python version
+  - python=3.9
+  # Main requirements
+  - biopython>=1.66
+  - pyemojify
+  # Build requirements
+  - twine>=1.11
+  - setuptools>=38.6
+  - cython>=3.0.0
+  - cxx-compiler
