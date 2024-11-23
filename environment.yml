@@ -10,3 +10,5 @@ dependencies:
   # Build requirements
   - twine>=1.11
   - setuptools>=38.6
+  - cython>=3.0.0
+  - cxx-compiler
