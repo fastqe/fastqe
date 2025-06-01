@@ -1,3 +1,52 @@
 [build-system]
-requires = ['twine>=1.11.0', 'setuptools>=38.6']
-build-backend = "setuptools.build_meta"
+requires = ["maturin>=1.8,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "fastqe"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dynamic = ["version"]
+description = "A emoji based bioinformatics command line tool"
+readme = "README.md"
+license = "BSD-3-Clause"
+authors = [
+    { name = "Andrew Lonsdale", email = "andrew.lonsdale@lonsbio.com.au" },
+]
+keywords = [
+    "bioinformatics",
+    "emoji",
+    "next-generation sequencing",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+
+
+[project.scripts]
+fastqe = "fastqe.fastqe:main"
+
+[project.urls]
+Homepage = "https://github.com/fastqe/fastqe"
+
+
+
+
+[tool.maturin]
+python-source = "python"
+module-name = "fastqe._fastqe"
+features = ["pyo3/extension-module"]

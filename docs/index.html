@@ -27,7 +27,7 @@
               <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" target="_blank"  href="https://github.com/lonsbio/fastqe/">Source</a>
+              <a class="nav-link" target="_blank"  href="https://github.com/fastqe/fastqe/">Source</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" target="_blank" href="http://twitter.com/lonsbio">Contact</a>
@@ -47,118 +47,10 @@ Compute quality stats for FASTQ files and print those stats as emoji... for some
 
 </div>
 
-        <div class="row marketing">
-          <div class="col-lg-6">
-
-            <h4>Install</h4>
-          <p>  Python 3 required. Tested on Linux and Mac. <br> Windows partially suported and requires Windows Terminal.
-            </p>
-        <p><kbd>pip install fastqe</kbd></p>
-            <h4>Usage</h4>
-
-            See the <a target="_blank" href="https://github.com/lonsbio/fastqe">README</a> for more options.
-        <p><kbd>fastqe [--bin] [--min] [--max] [FASTQ_FILE ...]</kbd></p>
-
-
-                    <h4>Mapping & Scale Bar</h4>
-                    <p>
-                  See <a href="https://github.com/lonsbio/fastqe">README</a> for more detail on the  mapping from phred scores to emoji:
-
-                  🚫❌👺💔🙅👾👿💀👻🙈🙉🙊🐵😿😾🙀💣🔥😡💩⚠️<br>
-                  😀😅😏😊😙😗😚😃😘😆😄😋😄😝😛😜😉😁😄😎😍
-        </p>
-
-        <p>Scores can also be binned:</p>
-
-        <table>
-        <tr>
-          <th>Bin</th>
-
-          <th>Emoji</th>
-        </tr>
-          <tr>
-
-            <td>N  </td>    <td>🚫</td>
-          </tr><tr>
-            <td>2-9 </td>   <td>💀</td>
-          </tr><tr>
-          <td>10–19 </td>    <td>💩</td>
-            </tr><tr>
-            <td>20–24 </td>   <td>⚠️</td>
-          </tr><tr>
-            <td>25–29 </td> <td>😄</td>
-          </tr><tr>
-            <td>30–34 </td> <td>😆</td>
-          </tr><tr>
-            <td>35–39 </td>   <td>😎</td>
-          </tr><tr>
-            <td>≥ 40 </td>  <td>😍</td>
-
-          </tr>
-        </table>
-        <br>
-   
-
-
-          </div>
-
-          <div class="col-lg-6">
-
-            <h4>Biomojify</h4>
-              
-                   <p>
-                     
-A companion program, <kbd>biomojify</kbd>, will convert sequences rather than summarise them:
-                     
-                     <div>
-                     
-$ biomojify fasta test.fasta <br>
-▶️ SEQUENCE_1 <br>
-🥑🍅🥑🍇🍅🌽🥑🍇🍅🥑🌽🍇🍅🥑🍇🍅🌽🍇🥑🍅🍇🌽🍅🥑🍇🌽🍅🥑🍇🍅🥑🍇🍇<br>
-🍇🍇🍇🍇🌽🍅🍇🥑🍅🍇🥑🍅🍇🍅🥑🍇🌽🍅🌽🍇🥑🍅🌽🍇🍅🥑🌽🍇🍅🥑🌽🍇🍅<br>
-🥑🌽🍇🌽🍅🍇🥑🍇🍅🌽🥑🍇🍅🍇🌽🥑🌽🍇🍅🥑🌽🍇🌽🍅🍇🌽🥑🍅🍇🌽🌽❓🍅<br>
-🥑🍇❓🌽🍅🥑🥑🥑🥑🍇❓🌽🍅🥑❓🍇🌽🍅🥑🍇🌽❓🍅🥑❓🍇🌽🍅🍇🥑🌽🍅❓<br>
-🥑🍇❓🍅🍇🥑🌽🍅🍇🌽❓🍅🌽🍇🍅🌽🍇❓🥑🍅🌽🥑🍅🍇🍅🥑🌽🍇🍅🥑🍇🌽🍇<br>
-🥑🍇🌽🍅🍅🍅🍅🍅🍅🍅🥑🍇🍅🍇🍅🥑🌽🍇🍅🥑🍇🍅🥑🌽🍅🥑🌽🌽🌽🌽🌽🌽🌽<br>
-🌽🌽🍇🍅🥑🌽🍇🍅🥑🌽🍇🍅🥑🌽🍇🍅🌽🥑🌽🍇🍅🍇🌽🍅🍇🥑🌽🍅❓❓❓🥑🌽<br>
-🍇🥑🍅🌽🍇🍅🥑🍇🍅🥑🍇🌽🍅🍇🥑🌽🍅🍇🥑🍅🍇🌽🍅 <br>
-                       </div>
-                     <br> 
-See that project page for more information: <a href="https://github.com/fastqe/biomojify">https://github.com/fastqe/biomojify</a>
-            </p>
-              
-              
-            
-            <h4>Feedback</h4>
-              <p> Submit <a href="https://github.com/lonsbio/fastqe/issues/new">bugs, enhancements and feedback via GitHub</a>.</p>
-
-            </p>
-
-              <h4>Contribute</h4>
-              <p>There is lots of room for improvement in this tool. The majority of the  code has been
-                written in the hours (and minutes) prior to presentations, so its almost guaranteed to be suboptimal.
-                Pull requests welcome on <a  target="_blank"  href="https://github.com/fastqe/fastqe/">GitHub</a>.
-                <br/>
-                Development of FASTQE continues, and you can get involved by talking to us on <a href="https://gitter.im/fastqe/general">Gitter</a> or use the <b>Open Chat</b> button below.
-                <br/>
-                <script>
-  ((window.gitter = {}).chat = {}).options = {
-    room: 'fastqe/general'
-  };
-</script>
-<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
-                
-            </p>
-
-           
-          
-        </div>
-        </div>
-
       </main>
 
       <footer class="footer">
-        <p>&copy; Andrew Lonsdale 2018</p>
+        <p>&copy; Andrew Lonsdale 2025</p>
       </footer>
 
     </div> <!-- /container -->
