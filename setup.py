@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 # Remember to change when making a new release
-version = '0.3.4'
+version = '0.3.5'
 dl_version = 'master' if 'dev' in version else 'v{}'.format(version)
 
 with open('README.md') as f:
@@ -22,7 +22,7 @@ setup(
     download_url = 'https://github.com/fastqe/fastqe/tarball/{}'.format(dl_version),
     license = 'BSD-3-Clause',
     entry_points = {'console_scripts': ['fastqe = fastqe.fastqe:main']},
-    install_requires = ["biopython>=1.66",'pyemojify'],
+    install_requires = ["biopython>=1.66",'pyemojify','setuptools>=38.6'],
     setup_requires = ['twine>=1.11.0', 'setuptools>=38.6'],
     packages = find_packages(exclude=('test', 'docs')),
     classifiers = [
