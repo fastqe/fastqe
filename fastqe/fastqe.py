@@ -32,28 +32,6 @@ import ast
 import binascii
 
 
-# #PyCharm testing command line processing
-# sys.argv = [
-#    __file__,
-#      '--min',
-#      '--max',
-#     '--noheader',
-#     # '--bin',
-#     # '--window', '10',
-#     # '--minlen', '15', qulity still gets outputed with this option
-#     '--html',
-#     # '--long','3000',
-#    # '--output', 'testouput.txt',
-# #   '--custom',
-# #   'test/test_dict.txt',
-# #    'test/test_short_seq.fq',
-#     'Reads.gz',
-#     # 'Long_reads.fq',
-#      # 'test/female_oral2.fastq-4143.gz',
-#    # 'test/test.fastq',
-#    # 'test/test_wiki.fq',
-# ]
-
 
 EXIT_FILE_IO_ERROR = 1
 EXIT_COMMAND_LINE_ERROR = 2
