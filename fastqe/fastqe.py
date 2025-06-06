@@ -546,48 +546,6 @@ def print_output(stats_object,fastq_filename, mapping_dict, mapping_text,mapping
 
 
         #html currently supports a HTML output
-        html_header = '''
-        <!doctype html>
-            <html lang="en">
-                              <head>
-                                                  <!-- Required meta tags -->
-                                                  <meta charset="utf-8">
-                                                                      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-                                                                                          <!-- Bootstrap CSS -->
-                                                                                          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
-                                                                                                              <title>Hello, world!</title>
-                                                                                                                        </head>
-                                                                                                                                  <body>
-
-
-                                                                                                                                          <script>
-                                                                                                                                                                  window.addEventListener('load', function(){
-
-                                                                                                                                                                  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-                                                                                                                                                          const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-
-                                                                                                                                                          const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-                                                                                                                                                          const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
-
-                                                                                                                                                          })
-                                                                                                                                          </script>
-
-        '''
-
-        html_footer = '''
-
-                    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-                    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-                                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-                                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-
-
-
-        </body></html>
-                '''
-
 
         html_format_fstring_plain = '<a href="#" class="text-decoration-none"  data-container="body"    data-bs-html="true" data-bs-toggle="tooltip" data-bs-title="Pos:{}&lt;br&gt;Max:{}&lt;br&gt;Mean:{}&lt;br&gt;Min:{}">{}</a>'
         #galaxy might need escaped html
