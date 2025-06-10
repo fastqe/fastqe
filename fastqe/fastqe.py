@@ -31,6 +31,8 @@ import gzip
 import ast
 import binascii
 
+from jinja2 import Environment, FileSystemLoader
+
 
 
 EXIT_FILE_IO_ERROR = 1
@@ -446,7 +448,14 @@ def process_files(options):
         print_scale(emaps.all_qualities, mapping_dict, options.bin)
 
 
+    if options.html:
+        logging.info("Collating outputs for HTML report")
+        jinja_data = []
+        template_dir = os.path.join(os.path.dirname(__file__), "templates")
 
+        # Setup Jinja2 environment
+        env = Environment(loader=FileSystemLoader(template_dir))
+        template = env.get_template("index.html")
 
     if options.fastq_files:
         for fastq_filename in options.fastq_files:
@@ -464,6 +473,9 @@ def process_files(options):
 
                     stats = FastqStats().from_file(fastq_file, read_size, options.minlen)
                     print_output(stats,fastq_filename, mapping_dict, mapping_text, mapping_default, output_file, OUTPUT_OPTIONS, spacer = mapping_spacer, window=options.window)
+                    if options.html:
+                        jinja_data.append(
+                                html_output(stats,fastq_filename, mapping_dict, mapping_text, mapping_default, output_file, OUTPUT_OPTIONS, spacer = mapping_spacer, window=options.window))
 
 
     else:
@@ -480,8 +492,122 @@ def process_files(options):
 
         stats = FastqStats().from_file(stdin_file, read_size, options.minlen)
         print_output(stats, "-", mapping_dict, mapping_text, mapping_default, output_file, OUTPUT_OPTIONS, spacer = mapping_spacer,window = options.window)
+        if options.html:
+             jinja_data.append(
+                                html_output(stats,"-", mapping_dict, mapping_text, mapping_default, output_file, OUTPUT_OPTIONS, spacer = mapping_spacer, window=options.window))
+    
+
+    if options.html:
+        logging.info("Merging data into template for HTML report")
+        html_content = template.render(items=jinja_data)
+
+        output_path = os.path.join(os.getcwd(), "output.html")
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(html_content)
+        logging.info("Rendered HTML to file")
 
 
+def html_output(stats_object,fastq_filename, mapping_dict, mapping_text,mapping_default, output_file ,output_type, sep = "\t",spacer = " ",window = 1 ):
+    '''
+    :param stats_object:
+    :param filename:
+    :param mapping_dict:
+    :param mapping_text:
+    :param mapping_default:
+    :param seperator:
+    :param output_file:
+    :param output_type:
+    :param sep:
+    :param window:
+    :return:
+    '''
+
+    # Returns a seq object for jinja template that summarises a file
+
+    #print(stats_object)
+
+    if output_type == CASE_HTML or output_type == CASE_HTML_ESCAPE:
+
+        seq_object = {
+                "name": stats_object.pretty(fastq_filename),
+                "numseq": stats_object.num_seqs ,
+                "max": stats_object.max_len ,
+                "min":  stats_object.min_len ,
+                "mean":  stats_object.average ,
+                "bases":  stats_object.num_bases ,
+                "reads": []
+                }
+
+        # sliding window - summarise in groups of N nucluotides, useful for long reads
+        seq_len = len(stats_object.quality_scores_mean)+1
+        window_range = range(1,seq_len,window )
+        #print(list(window_range))
+
+        mean_windowed = np.nanmean(np.r_[stats_object.quality_scores_mean.letter_annotations["phred_quality"], np.nan + np.zeros((-(seq_len-1) % window,))].reshape(-1, window), axis=-1)
+        min_windowed = np.nanmean(np.r_[stats_object.quality_scores_mins.letter_annotations["phred_quality"], np.nan + np.zeros((-(seq_len-1) % window,))].reshape(-1, window), axis=-1)
+        max_windowed = np.nanmean(np.r_[stats_object.quality_scores_maxs.letter_annotations["phred_quality"], np.nan + np.zeros((-(seq_len-1) % window,))].reshape(-1, window), axis=-1)
+
+
+        # mean added twice so that it is shown on HTML as well as tool tip
+        interleaved_scores = np.dstack((max_windowed,mean_windowed,min_windowed,mean_windowed
+                                        )).flatten()
+
+        # print(interleaved_scores)
+        fake_seq_interleaved = ''.join(["i"] * len(interleaved_scores))
+        #print(fake_seq_interleaved,interleaved_scores)
+
+        interleaved_scores_seq = SeqRecord(Seq(fake_seq_interleaved), id="test", name="mean scores",
+                                description="example with mean fastq socres",
+                                letter_annotations={'phred_quality': list(interleaved_scores.astype(int))})
+
+
+        #html currently supports a HTML output
+        just_emojis = interleaved_scores
+
+        # print([str(i) + "," + str(i + 3) for i in range(0, len(just_emojis), 3)])
+        just_emojis_3 = [just_emojis[i:i + 3] for i in range(0, len(just_emojis), 3)]
+        just_emojis_4 = [just_emojis[i:i + 4] for i in range(0, len(just_emojis), 4)]
+        # print(just_emojis_3)
+        
+
+        html_seqs = []
+
+        for ind, (max_e,mean_e,min_e,mean_e_2) in enumerate(just_emojis_4):
+            # print(max_e)
+            # print(np.array(max_e))
+            interleaved_scores_subset = np.array([max_e,mean_e,min_e,mean_e_2])
+            print_seq = SeqRecord(Seq("mmmm"), id="test", name="max mean min mean scores",
+                                  description="example with max mean min mean fastq socres",
+                                  letter_annotations={'phred_quality': list(interleaved_scores_subset.astype(int))})
+
+            # print_values = str(ind+1) +" " + map_scores(print_seq, mapping_dict=mapping_dict,default_value=mapping_default,
+            #                                             spacer=' ')
+            (seq_max, seq_mean, seq_min,_) = map_scores_html(print_seq, mapping_dict=mapping_dict,default_value=mapping_default,
+                                                        spacer='')
+            # print(print_values)
+            # print(' '.join(print_values))
+            if window == 1:
+                paging_text = ""
+            else:
+                paging_text ="-"+str(min(window_range[ind]+window-1,seq_len-1))
+            
+            seq_object["reads"].append( {
+                    "pos": str(window_range[ind])+paging_text,
+                    "max": seq_max,
+                    "mean": seq_mean,
+                    "min": seq_min
+                    } )
+
+
+        # print(stats_object.pretty(fastq_filename), "(html)" + mapping_text,
+        #  html_header + ''.join(html_text) + html_footer
+        #       ,
+        #       sep=sep,file=output_file)
+
+        # print(stats_object)
+
+
+        return seq_object
 
 
 def print_output(stats_object,fastq_filename, mapping_dict, mapping_text,mapping_default, output_file ,output_type, sep = "\t",spacer = " ",window = 1 ):
@@ -498,144 +624,17 @@ def print_output(stats_object,fastq_filename, mapping_dict, mapping_text,mapping
     :param window:
     :return:
     '''
-
-    if output_type == CASE_HTML or output_type == CASE_HTML_ESCAPE:
-
-
-        # we extract scores, merge, and then re-create the fake seq
-
-        # interleaved_scores =  np.dstack(([s for s in QualityIO._get_sanger_quality_str(stats_object.quality_scores_maxs)],
-        #                                  [s for s in
-        #                                   QualityIO._get_sanger_quality_str(stats_object.quality_scores_mean)],
-        #                                  [s for s in
-        #                                   QualityIO._get_sanger_quality_str(stats_object.quality_scores_mins)],
-        #                                  )).flatten()
-
-        #print(len(stats_object.quality_scores_maxs.letter_annotations["phred_quality"]),
-                                        # len(stats_object.quality_scores_mean.letter_annotations["phred_quality"]),
-                                        # len(stats_object.quality_scores_mins.letter_annotations["phred_quality"])
-                                        # )
-
-
-        # sliding window - summarise in groups of N nucluotides, useful for long reads
-        seq_len = len(stats_object.quality_scores_mean)+1
-        window_range = range(1,seq_len,window )
-        #print(list(window_range))
-
-        mean_windowed = np.nanmean(np.r_[stats_object.quality_scores_mean.letter_annotations["phred_quality"], np.nan + np.zeros((-(seq_len-1) % window,))].reshape(-1, window), axis=-1)
-        min_windowed = np.nanmean(np.r_[stats_object.quality_scores_mins.letter_annotations["phred_quality"], np.nan + np.zeros((-(seq_len-1) % window,))].reshape(-1, window), axis=-1)
-        max_windowed = np.nanmean(np.r_[stats_object.quality_scores_maxs.letter_annotations["phred_quality"], np.nan + np.zeros((-(seq_len-1) % window,))].reshape(-1, window), axis=-1)
-
-        interleaved_scores = np.dstack((max_windowed,mean_windowed,min_windowed,mean_windowed
-                                        )).flatten()
-
-
-        #include mean twice as it is the value diplsayed in 4th position
-        # interleaved_scores = np.dstack((stats_object.quality_scores_maxs.letter_annotations["phred_quality"],
-        #                                 stats_object.quality_scores_mean.letter_annotations["phred_quality"],
-        #                                 stats_object.quality_scores_mins.letter_annotations["phred_quality"],
-        #                                 stats_object.quality_scores_mean.letter_annotations["phred_quality"]
-        #                                 )).flatten()
-        # print(interleaved_scores)
-        fake_seq_interleaved = ''.join(["i"] * len(interleaved_scores))
-        #print(fake_seq_interleaved,interleaved_scores)
-
-        interleaved_scores_seq = SeqRecord(Seq(fake_seq_interleaved), id="test", name="mean scores",
-                                description="example with mean fastq socres",
-                                letter_annotations={'phred_quality': list(interleaved_scores.astype(int))})
-
-
-        #html currently supports a HTML output
-
-        html_format_fstring_plain = '<a href="#" class="text-decoration-none"  data-container="body"    data-bs-html="true" data-bs-toggle="tooltip" data-bs-title="Pos:{}&lt;br&gt;Max:{}&lt;br&gt;Mean:{}&lt;br&gt;Min:{}">{}</a>'
-        #galaxy might need escaped html
-        html_format_fstring_escape = '<a href="#" class="text-decoration-none"  data-container="body"    data-bs-html="true" data-bs-toggle="tooltip" data-bs-title=""Pos:{}&lt;br&gt;Max:{}&lt;br&gt;Mean:{}&lt;br&gt;Min:{}"">{}</a>'
-
-        html_format_fstring_header_plain = '<a href="#" class="text-decoration-none"  data-container="body"    data-bs-html="true" data-bs-toggle="tooltip" data-bs-title="Sequences: {}&lt;br&gt;Max length:{}&lt;br&gt;Min length:{}&lt;br&gt;Mean length:{}&lt;br&gt;Bases: {}">🏷️️</a>'
-        html_format_fstring_header_escape = '<a href="#" class="text-decoration-none"  data-container="body"    data-bs-html="true" data-bs-toggle="tooltip" data-bs-title=""Sequences: {}&lt;br&gt;Max length:{}&lt;br&gt;Min length:{}&lt;br&gt;Mean length:{}&lt;br&gt;Bases: {}"">️🏷️️</a>'
-
-        if output_type == CASE_HTML_ESCAPE:
-            html_format_fstring = html_format_fstring_escape
-            html_format_fstring_header= html_format_fstring_header_escape
-        else:
-            html_format_fstring=html_format_fstring_plain
-            html_format_fstring_header= html_format_fstring_header_plain
-
-        #
-        # just_emojis = map_scores(interleaved_scores_seq,
-        #            mapping_dict=mapping_dict,
-        #            default_value=mapping_default,
-        #            spacer='')
-        #
-        # print([str(i) + "," + str(i + 3) for i in range(0, len(just_emojis), 3)])
-        # just_emojis_3 = [just_emojis[i:i + 3] for i in range(0, len(just_emojis), 3)]
-        # print(just_emojis_3)
-        # html_text = [ html_format_fstring.format(ind+1,max_e,mean_e,min_e,mean_e) for ind, (max_e,mean_e,min_e) in enumerate(just_emojis_3) ]
-        # #print('We are the {} who say "{}!"'.format('knights', 'Ni'))
-        #ind, x in enumerate(list1)
-
-        just_emojis = interleaved_scores
-
-
-
-        #
-        # print([str(i) + "," + str(i + 3) for i in range(0, len(just_emojis), 3)])
-        just_emojis_3 = [just_emojis[i:i + 3] for i in range(0, len(just_emojis), 3)]
-        just_emojis_4 = [just_emojis[i:i + 4] for i in range(0, len(just_emojis), 4)]
-        # print(just_emojis_3)
-        # html_text = [ html_format_fstring.format(ind+1,map_scores(max_e, mapping_dict=mapping_dict,default_value=mapping_default,spacer=' '),mean_e,min_e,mean_e) for ind, (max_e,mean_e,min_e) in enumerate(just_emojis_3) ]
-        html_text = ""
-        #
-        # interleaved_scores_seq = SeqRecord(Seq(fake_seq_interleaved), id="test", name="mean scores",
-        #                         description="example with mean fastq socres",
-        #                         letter_annotations={'phred_quality': list(interleaved_scores.astype(int))})
-        for ind, (max_e,mean_e,min_e,mean_e_2) in enumerate(just_emojis_4):
-            # print(max_e)
-            # print(np.array(max_e))
-            interleaved_scores_subset = np.array([max_e,mean_e,min_e,mean_e_2])
-            print_seq = SeqRecord(Seq("mmmm"), id="test", name="max mean min mean scores",
-                                  description="example with max mean min mean fastq socres",
-                                  letter_annotations={'phred_quality': list(interleaved_scores_subset.astype(int))})
-
-            # print_values = str(ind+1) +" " + map_scores(print_seq, mapping_dict=mapping_dict,default_value=mapping_default,
-            #                                             spacer=' ')
-            print_values = map_scores_html(print_seq, mapping_dict=mapping_dict,default_value=mapping_default,
-                                                        spacer='')
-            # print(print_values)
-            # print(' '.join(print_values))
-            if window == 1:
-                paging_text = ""
-            else:
-                paging_text ="-"+str(min(window_range[ind]+window-1,seq_len-1))
-            html_text += html_format_fstring.format(str(window_range[ind])+paging_text,*print_values)
-
-
-        # print(stats_object.pretty(fastq_filename), "(html)" + mapping_text,
-        #  html_header + ''.join(html_text) + html_footer
-        #       ,
-        #       sep=sep,file=output_file)
-
-        # print(stats_object)
-        print(html_header + "️▶️  "  + html_format_fstring_header.format(stats_object.num_seqs,stats_object.max_len,stats_object.min_len,stats_object.average,stats_object.num_bases) +"   " + stats_object.pretty(fastq_filename)   + '<br>' + ''.join(html_text) + '<br>' + html_footer
-              ,
-              sep=sep,file=output_file)
-
-
-    else:
-        if output_type == CASE_BOTH or output_type == CASE_MAX:
+    if output_type == CASE_BOTH or output_type == CASE_MAX:
             print(stats_object.pretty(fastq_filename), "max" + mapping_text,
               map_scores(stats_object.quality_scores_maxs, mapping_dict=mapping_dict, default_value = mapping_default,spacer=spacer), sep=sep, file=output_file)
 
-        print(stats_object.pretty(fastq_filename), "mean" + mapping_text,map_scores(stats_object.quality_scores_mean, mapping_dict=mapping_dict,default_value = mapping_default,spacer=spacer), sep=sep,file=output_file)
+    print(stats_object.pretty(fastq_filename), "mean" + mapping_text,map_scores(stats_object.quality_scores_mean, mapping_dict=mapping_dict,default_value = mapping_default,spacer=spacer), sep=sep,file=output_file)
 
-        if output_type == CASE_BOTH or output_type == CASE_MIN:
+    if output_type == CASE_BOTH or output_type == CASE_MIN:
             print(stats_object.pretty(fastq_filename), "min" + mapping_text,
               map_scores(stats_object.quality_scores_mins, mapping_dict=mapping_dict, default_value = mapping_default,spacer=spacer), sep=sep, file=output_file)
 
 
-    #print(stats_object.pretty(fastq_filename), "counts" + mapping_text,
-    #      nomap([a for a in stats_object.counts_per_position]
-    #                 ), sep=sep,file=output_file)
 
 def nomap(input):
 

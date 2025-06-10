@@ -1,0 +1,1 @@
+recursive-include fastqe/templates *.html
