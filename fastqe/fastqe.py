@@ -18,7 +18,6 @@ from math import floor
 import sys
 from Bio import SeqIO
 import logging
-import pkg_resources
 from pyemojify import emojify
 import numpy as np
 from Bio import SeqIO
@@ -82,10 +81,7 @@ def print_scale(full_quals,mapping_dict,binned):
 
 
 
-try:
-    PROGRAM_VERSION = pkg_resources.require(PROGRAM_NAME)[0].version
-except pkg_resources.DistributionNotFound:
-    PROGRAM_VERSION = "undefined_version"
+PROGRAM_VERSION = "undefined_version"
 
 
 def exit_with_error(message, exit_status):
