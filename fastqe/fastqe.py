@@ -18,7 +18,6 @@ from math import floor
 import sys
 from Bio import SeqIO
 import logging
-import pkg_resources
 from pyemojify import emojify
 import numpy as np
 from Bio import SeqIO
@@ -62,10 +61,7 @@ def print_scale(full_quals,mapping_dict,binned):
 
 
 
-try:
-    PROGRAM_VERSION = pkg_resources.require(PROGRAM_NAME)[0].version
-except pkg_resources.DistributionNotFound:
-    PROGRAM_VERSION = "undefined_version"
+PROGRAM_VERSION = "0.5.0"
 
 
 def exit_with_error(message, exit_status):
@@ -120,17 +116,18 @@ def parse_args():
         action='store_true',
         help='Hide the header before sample output')
     parser.add_argument('--html',
-                        action='store_true',
-                        help='output all data as html [Experimental]')
+                        metavar='HTML_FILE',
+                        type=FileType('w'),
+                        help='output an additional HTML report in HTML_FILE')
     parser.add_argument(
         '--window',
         metavar='W',
         type=int,
         default=1,
-        help='Window length to summarise reads in HTML report (default 1) [Experimental]')
+        help='Window length to summarise reads in HTML report (default 1)')
     parser.add_argument('--html_escape',
                         action='store_true',
-                        help='escape html within output, e.g. for Galaxy parsing [Experimental]')
+                        help='escape html within output, e.g. for Galaxy parsing')
     parser.add_argument('--min',
                         action='store_true',
                         help='show minimum quality per position')
@@ -501,9 +498,11 @@ def process_files(options):
         logging.info("Merging data into template for HTML report")
         html_content = template.render(items=jinja_data)
 
-        output_path = os.path.join(os.getcwd(), "output.html")
-        with open(output_path, "w", encoding="utf-8") as f:
-            f.write(html_content)
+        output_path =  options.html
+        #output_path = os.path.join(os.getcwd(), "output.html")
+        #with open(output_path, "w", encoding="utf-8") as f:
+        #    f.write(html_content)
+        options.html.write(html_content)
         logging.info("Rendered HTML to file")
 
 
