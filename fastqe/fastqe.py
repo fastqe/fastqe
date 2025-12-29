@@ -61,7 +61,7 @@ def print_scale(full_quals,mapping_dict,binned):
 
 
 
-PROGRAM_VERSION = "0.5.0"
+PROGRAM_VERSION = "0.5.2"
 
 
 def exit_with_error(message, exit_status):
